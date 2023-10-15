@@ -1,0 +1,8 @@
+__pycache__/
+
+flight-fight.build/
+flight-fight.dist/
+flight-fight.onefile-build/
+
+userdata/123123.json
+*.exe

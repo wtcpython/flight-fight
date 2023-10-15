@@ -1,0 +1,18 @@
+{
+    "Easy":{
+        "BombNum":5,
+        "LifeNum":3,
+        "MinimumScore":30000
+    },
+    "Mid":{
+        "BombNum":5,
+        "LifeNum":3,
+        "MinimumScore":50000
+    },
+    "Hard":{
+        "BombNum":5,
+        "LifeNum":3,
+        "MinimumScore":80000
+    },
+    "BestScore":0
+}
