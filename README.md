@@ -8,5 +8,4 @@
 
     1. Python Version >= 3.10
     2. Pygame Version >= 2.5
-    3. 满足运行以上两者条件的 Operator System
-
+    3. 满足运行以上两者条件的 Windows, MacOS 或 Linux 系统版本
