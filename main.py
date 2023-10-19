@@ -17,8 +17,7 @@ import const
 from enemy import SmallEnemy, MidEnemy, LargeEnemy
 
 from plane_utils import (
-    screen, load_music, load_img, read_json, write_json,
-    render_text)
+    screen, load_music, load_img, read_json, write_json)
 
 from bullet_base import BulletBase
 from plane_base import Plane
@@ -26,6 +25,7 @@ from supply_base import BulletSupply, BombSupply
 from screen_element import show_score, show_bomb_info, show_life_num_info
 from volume_control import VolumeControlBase
 from login_box import LoginBox
+from text_rect import TextRect
 
 pygame.base.init()
 pygame.mixer.init()
@@ -82,9 +82,6 @@ class Main:
 
         # 登录输入框
         self.login_box = LoginBox()
-        self.login_box.set_pos(
-            (const.WINDOW_WIDTH - self.login_box.width()) // 2,
-            (const.WINDOW_HEIGHT - self.login_box.height()) // 3)
 
         # 是否超级子弹
         self.super_bullet = False
@@ -142,11 +139,9 @@ class Main:
         else:
             text = "登   录"
 
-        login_title = render_text(text, (255, 255, 255))
-        login_title_rect = login_title.get_rect()
-        login_title_rect.left, login_title_rect.top = (
-            (const.WINDOW_WIDTH - login_title_rect.width) // 2,
-            const.WINDOW_FRAME_WIDTH)
+        login_title = TextRect(
+            text, const.Color.WHITE,
+            (const.WINDOW_WIDTH // 2, const.WINDOW_FRAME_WIDTH * 5))
 
         data = read_json("./userdata/all_users.json")
 
@@ -246,9 +241,11 @@ class Main:
                         elif self.status == const.Status.LOGIN:
                             if event.key in [pygame.constants.K_RETURN, pygame.constants.K_KP_ENTER]:
                                 self.account = self.login_box.check_enter()
-                                login_title = render_text(
-                                    f"Welcome,{self.account} !",
-                                    (255, 255, 255))
+                                login_title.set_text(
+                                    f"Welcome,{self.account} !")
+                                # login_title = render_text(
+                                #     f"Welcome,{self.account} !",
+                                #     (255, 255, 255))
                                 self.loggedin = True
                                 self.status = const.Status.PLAY
                                 self.current_pause_image = self.pause_images[0]
@@ -365,21 +362,18 @@ class Main:
                             write_json(f"userdata/{self.account}.json", save)
 
                         # 绘制结束画面
-                        game_over = render_text(
+                        game_over = TextRect(
                             "Win!" if self.score >= data[mode]["MinimumScore"]
-                            else "Lose!",
-                            (255, 255, 255))
+                            else "Lose!", const.Color.WHITE,
+                            (const.WINDOW_WIDTH // 2, 150))
                         game_over_rect = game_over.get_rect()
-                        game_over_rect.left, game_over_rect.top = (
-                            (const.WINDOW_WIDTH - game_over_rect.width) // 2, 150)
-                        screen.blit(game_over, game_over_rect)
+                        screen.blit(game_over.get_surface(), game_over_rect)
 
-                        best_score = render_text(
-                            f"Best : {record_score}", (255, 255, 255))
-                        best_score_rect = best_score.get_rect()
-                        best_score_rect.left, best_score_rect.top = (
-                            (const.WINDOW_WIDTH - best_score_rect.width) // 2, 50)
-                        screen.blit(best_score, best_score_rect)
+                        best_score = TextRect(
+                            f"Best : {record_score}", const.Color.WHITE,
+                            (const.WINDOW_WIDTH // 2, 100))
+                        screen.blit(best_score.get_surface(),
+                                    best_score.get_rect())
 
                         again_rect.left, again_rect.top = (
                             (const.WINDOW_WIDTH - again_rect.width) // 2,
@@ -402,7 +396,8 @@ class Main:
                 case const.Status.LOGIN:
                     self.login_box.update()
                     self.login_box.draw()
-                    screen.blit(login_title, login_title_rect)
+                    screen.blit(login_title.get_surface(),
+                                login_title.get_rect())
 
             # 切换图片
             if not delay % 5:

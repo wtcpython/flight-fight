@@ -9,7 +9,9 @@ from shutil import copyfile
 
 import pygame
 
-from plane_utils import screen, render_text
+import const
+from plane_utils import screen
+from text_rect import TextRect
 
 COLOR_INACTIVE = pygame.Color('lightskyblue3')
 COLOR_ACTIVE = pygame.Color('dodgerblue2')
@@ -20,36 +22,24 @@ class LoginBox():
     输入框
     """
     def __init__(self):
-        self.tip_text = render_text("输入你的ID:", (255, 255, 255))
+        self.tip_text = TextRect(
+            "输入你的ID:", const.Color.WHITE, (0, 0))
         self.tip_rect = self.tip_text.get_rect()
-
         self.login_box = pygame.Rect(0, 0, 200, self.tip_rect.height)
+
+        self.tip_rect.left, self.tip_rect.top = ((
+            const.WINDOW_WIDTH - self.tip_rect.width -
+            self.login_box.width) // 2,
+            (const.WINDOW_HEIGHT - self.tip_rect.height) // 3)
+        self.login_box.left, self.login_box.top = (
+            self.tip_rect.right + 10, self.tip_rect.top)
 
         self.current_color = COLOR_INACTIVE
         self.text = ""
-        self.render_text = render_text(self.text, self.current_color)
+        self.render_text = TextRect(self.text, self.current_color, (0, 0))
 
         self.active = False
         self.account = None
-
-    def set_pos(self, left: int, top: int):
-        """
-        设置控件位置
-        """
-        self.tip_rect.left, self.tip_rect.top = left, top
-        self.login_box.left, self.login_box.top = self.tip_rect.right + 10, top
-
-    def width(self) -> int:
-        """
-        获取输入框的宽度
-        """
-        return self.tip_rect.width + self.login_box.width
-
-    def height(self) -> int:
-        """
-        获取输入框的高度
-        """
-        return self.tip_rect.height
 
     def check_enter(self):
         """
@@ -86,20 +76,21 @@ class LoginBox():
                 elif len(self.text) < 16 and (uni := event.unicode).isascii()\
                         and uni not in ["\\", "/", r"\r"]:
                     self.text += uni
-        self.render_text = render_text(self.text.strip(), self.current_color)
+        self.render_text.set_text(self.text.strip())
+        self.render_text.set_color(self.current_color)
 
     def update(self):
         """
         更新
         """
-        self.login_box.width = max(200, self.render_text.get_width()+10)
+        self.login_box.width = max(200, self.render_text.get_rect().width+10)
 
     def draw(self):
         """
         绘制
         """
-        screen.blit(self.tip_text, self.tip_rect)
-        screen.blit(self.render_text,
+        screen.blit(self.tip_text.get_surface(), self.tip_rect)
+        screen.blit(self.render_text.get_surface(),
                     (self.login_box.x+2, self.login_box.y+2))
         pygame.draw.rect(screen, self.current_color,
                          self.login_box, 2, border_radius=10)

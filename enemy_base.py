@@ -57,7 +57,7 @@ class EnemyBase(pygame.sprite.Sprite):
         设置敌机位置
         """
         self.rect.left, self.rect.top = \
-            random.randint(0, const.WINDOW_WIDTH - self.rect.width), \
+            random.randint(20, const.WINDOW_WIDTH - self.rect.width - 20), \
             random.randint(-10 * self.rect.height, 0)
 
     def reset(self):

@@ -40,12 +40,3 @@ def load_music(path: str) -> pygame.mixer.Sound:
     加载音乐
     """
     return pygame.mixer.Sound(path)
-
-
-def render_text(content: str, color: tuple) -> pygame.surface.Surface:
-    """
-    渲染文本
-    """
-    font = pygame.font.Font("./msyhbd.ttc", 32)
-    render = font.render(content, True, color)
-    return render

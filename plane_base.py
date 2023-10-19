@@ -65,9 +65,8 @@ class Plane(pygame.sprite.Sprite):
         """
         将我方飞机放置于屏幕正中央下方
         """
-        self.rect.left, self.rect.top = (
-            (const.WINDOW_WIDTH - self.rect.width) // 2,
-            const.WINDOW_HEIGHT - self.rect.height)
+        self.rect.center = (const.WINDOW_WIDTH // 2,
+                            const.WINDOW_HEIGHT - self.rect.height // 2)
 
     def reset(self):
         """
