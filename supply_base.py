@@ -66,14 +66,26 @@ class SupplyBase(object):
                 return True
         return False
 
+    def set_music_volume(self, vol: int):
+        """
+        设置音量
+        """
+        self.get_supply.set_volume(vol)
+
 
 class BulletSupply(SupplyBase):
+    """
+    子弹补给
+    """
     def __init__(self):
         self.image = load_img("./images/bullet_supply.png")
         super().__init__(self.image, const.GET_BULLET_SOUND)
 
 
 class BombSupply(SupplyBase):
+    """
+    炸弹补给
+    """
     def __init__(self):
         self.image = load_img("./images/bomb_supply.png")
         super().__init__(self.image, const.GET_BOMB_SOUND)

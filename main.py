@@ -97,7 +97,7 @@ class Main:
         self.life_num = 0
 
         # 音量
-        self.snd = self.vol = 0.2
+        # self.snd = self.vol = 0.2
 
     def init_game(self, data_mode):
         """
@@ -120,7 +120,7 @@ class Main:
 
         # 游戏主音乐加载
         pygame.mixer.music.load("./sound/bgm.mp3")
-        pygame.mixer.music.set_volume(self.vol)
+        pygame.mixer.music.set_volume(0.2)
         pygame.mixer.music.play(-1)
         pygame.mixer.music.pause()
 
@@ -162,9 +162,9 @@ class Main:
 
         # 高级暂停操作、音量调节
         volume_control = VolumeControlBase(
-            "音量", self.vol, 0, const.WINDOW_HEIGHT // 3)
+            "音量", 0, const.WINDOW_HEIGHT // 3)
         sound_control = VolumeControlBase(
-            "音效", self.snd, 0, const.WINDOW_HEIGHT // 3 + 60)
+            "音效", 0, const.WINDOW_HEIGHT // 3 + 60)
 
         # 用于阻止重复打开记录文件
         recorded = False
@@ -214,10 +214,21 @@ class Main:
                                     sys.exit()
 
                         elif self.status == const.Status.PAUSE:
-                            volume_control.check(event.pos)
+                            # 设置音量
+                            if volume_control.check(event.pos):
+                                pygame.mixer.music.set_volume(
+                                    volume_control.get_volume())
+
+                            # 设置音效
                             if sound_control.check(event.pos):
+                                snd = sound_control.get_volume()
+                                self.my_plane.set_music_volume(snd)
+                                for enemy in self.enemies:
+                                    enemy.set_music_volume(snd)
+                                self.bomb_supply.set_music_volume(snd)
+                                self.bullet_supply.set_music_volume(snd)
                                 for i in sound_list:
-                                    i.set_volume(self.snd)
+                                    i.set_volume(snd)
 
                         elif self.status == const.Status.LOGIN:
                             self.login_box.check_event(event)
@@ -239,13 +250,12 @@ class Main:
                                 self.init_game(data[mode])
                                 self.status = const.Status.PLAY
                         elif self.status == const.Status.LOGIN:
-                            if event.key in [pygame.constants.K_RETURN, pygame.constants.K_KP_ENTER]:
+                            if event.key in [
+                                    pygame.constants.K_RETURN,
+                                    pygame.constants.K_KP_ENTER]:
                                 self.account = self.login_box.check_enter()
                                 login_title.set_text(
                                     f"Welcome,{self.account} !")
-                                # login_title = render_text(
-                                #     f"Welcome,{self.account} !",
-                                #     (255, 255, 255))
                                 self.loggedin = True
                                 self.status = const.Status.PLAY
                                 self.current_pause_image = self.pause_images[0]

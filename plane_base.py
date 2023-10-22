@@ -106,3 +106,9 @@ class Plane(pygame.sprite.Sprite):
                 if self.index == 0:
                     return False
         return True
+
+    def set_music_volume(self, vol: int):
+        """
+        设置音量
+        """
+        self.down_music.set_volume(vol)

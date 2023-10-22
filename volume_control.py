@@ -12,7 +12,10 @@ class VolumeControlBase():
     """
     音量控制基类
     """
-    def __init__(self, content: str, volume, left, top):
+    def __init__(self, content: str, left, top):
+        # 默认音量为 20%
+        self.value = 0.2
+
         self.volume_text = TextRect(content, const.Color.WHITE, (0, 0))
         self.volume_rect = self.volume_text.get_rect()
         self.volume_rect.left, self.volume_rect.top = left, top
@@ -25,25 +28,31 @@ class VolumeControlBase():
         self.volume_full = pygame.Rect(
             0 + self.volume_rect.width + 10,
             self.volume_rect.top,
-            volume * 300, self.volume_rect.height)
+            self.value * 300, self.volume_rect.height)
 
         self.percent_show = TextRect(
-            f"{int(volume * 100)}", const.Color.WHITE, (0, 0))
+            f"{int(self.value * 100)}", const.Color.WHITE, (0, 0))
         self.percent_show_rect = self.percent_show.get_rect()
         self.percent_show_rect.left, self.percent_show_rect.top = (
             0 + self.volume_rect.width + 320,
             self.volume_rect.top)
 
-    def set_volume(self, volume):
+    def set_volume(self):
         """
         设置当前音量
         """
         self.volume_full = pygame.Rect(
             0 + self.volume_rect.width + 10,
             self.volume_rect.top,
-            volume * 300, self.volume_rect.height)
+            self.value * 300, self.volume_rect.height)
 
-        self.percent_show.set_text(f"{int(volume * 100)}")
+        self.percent_show.set_text(f"{int(self.value * 100)}")
+
+    def get_volume(self) -> float:
+        """
+        获取当前音量
+        """
+        return self.value
 
     def draw(self):
         """
@@ -59,7 +68,7 @@ class VolumeControlBase():
         检查鼠标点击状态
         """
         if self.volume_frame.collidepoint(pos):
-            vol = (pos[0] - (0 + self.volume_rect.width + 10)) / 300
-            self.set_volume(vol)
+            self.value = (pos[0] - (0 + self.volume_rect.width + 10)) / 300
+            self.set_volume()
             return True
         return False

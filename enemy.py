@@ -41,3 +41,10 @@ class LargeEnemy(EnemyBase):
         super().__init__(const.Enemy.Large)
 
         self.fly_sound = load_music(const.LARGE_ENEMY_FLY_SOUND)
+
+    def set_music_volume(self, vol: int):
+        """
+        追加大型战机入场的音乐
+        """
+        super().set_music_volume(vol)
+        self.fly_sound.set_volume(vol)

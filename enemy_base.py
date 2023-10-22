@@ -119,3 +119,9 @@ class EnemyBase(pygame.sprite.Sprite):
                     self.reset()
                     return self.kill_score
         return 0
+
+    def set_music_volume(self, vol: int):
+        """
+        设置音量
+        """
+        self.down_music.set_volume(vol)
