@@ -5,7 +5,6 @@
 
 import const
 from enemy_base import EnemyBase
-from plane_utils import load_img, load_music
 
 
 class SmallEnemy(EnemyBase):
@@ -24,9 +23,9 @@ class MidEnemy(EnemyBase):
     """
 
     def __init__(self) -> None:
-        self.image_hit = load_img("./images/enemy_mid_hit.png")
-
         super().__init__(const.Enemy.Mid)
+
+        self.set_image_hit(const.Enemy.Mid.IMAGE_HIT)
 
 
 class LargeEnemy(EnemyBase):
@@ -35,12 +34,10 @@ class LargeEnemy(EnemyBase):
     """
 
     def __init__(self) -> None:
-
-        self.image_hit = load_img("./images/enemy_large_hit.png")
-
         super().__init__(const.Enemy.Large)
 
-        self.fly_sound = load_music(const.LARGE_ENEMY_FLY_SOUND)
+        self.set_image_hit(const.Enemy.Large.IMAGE_HIT)
+        self.set_fly_sound(const.Enemy.Large.FLY_SOUND)
 
     def set_music_volume(self, vol: int):
         """

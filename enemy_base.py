@@ -33,7 +33,6 @@ class EnemyBase(pygame.sprite.Sprite):
 
         self.rect = self.images[0].get_rect()
         self.speed = self.enemy_type.SPEED
-        self.active = True
 
         self.set_enemy_location()
 
@@ -42,6 +41,8 @@ class EnemyBase(pygame.sprite.Sprite):
         self.const_blood = self.blood = self.enemy_type.BLOOD
 
         self.hit = False
+        self.image_hit = None
+        self.fly_sound = None
 
     def move(self):
         """
@@ -51,6 +52,18 @@ class EnemyBase(pygame.sprite.Sprite):
             self.rect.top += self.speed
         else:
             self.reset()
+
+    def set_image_hit(self, path: str) -> None:
+        """
+        设置击中图片
+        """
+        self.image_hit = load_img(path)
+
+    def set_fly_sound(self, path: str) -> None:
+        """
+        设置敌机飞行音乐
+        """
+        self.fly_sound = load_music(path)
 
     def set_enemy_location(self):
         """
@@ -64,7 +77,6 @@ class EnemyBase(pygame.sprite.Sprite):
         """
         重置敌机数据
         """
-        self.active = True
         self.blood = self.const_blood
         self.set_enemy_location()
 
@@ -77,10 +89,10 @@ class EnemyBase(pygame.sprite.Sprite):
 
         返回值为敌机存活状态
         """
-        if self.active and self.blood > 0:
+        if self.blood > 0:
             self.move()
             if self.hit:
-                if hasattr(self, "image_hit"):
+                if self.image_hit:
                     screen.blit(self.image_hit, self.rect)
                 self.hit = False
             else:
@@ -103,9 +115,8 @@ class EnemyBase(pygame.sprite.Sprite):
 
             # (仅限大型战机) 即将出现在画面中，播放音效
             # 只有大型战机有音乐
-            if hasattr(self, "fly_sound"):
-                if self.rect.bottom == -50:
-                    self.fly_sound.play()
+            if self.fly_sound and self.rect.bottom == -50:
+                self.fly_sound.play()
         else:
             if not delay % 3:
                 if self.index == 0:
@@ -114,7 +125,7 @@ class EnemyBase(pygame.sprite.Sprite):
                     self.destroy_images[self.index], self.rect)
                 self.index = (self.index + 1) % len(self.destroy_images)
                 if self.index == 0:
-                    if hasattr(self, "fly_sound"):
+                    if self.fly_sound:
                         self.fly_sound.stop()
                     self.reset()
                     return self.kill_score

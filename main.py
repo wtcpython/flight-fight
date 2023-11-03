@@ -96,9 +96,6 @@ class Main:
         self.bomb_num = 0
         self.life_num = 0
 
-        # 音量
-        # self.snd = self.vol = 0.2
-
     def init_game(self, data_mode):
         """
         游戏数据初始化

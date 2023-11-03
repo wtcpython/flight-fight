@@ -35,7 +35,6 @@ SUPPLY_SOUND = "./sound/supply.ogg"
 GET_BOMB_SOUND = "./sound/get_bomb.ogg"
 GET_BULLET_SOUND = "./sound/get_bullet.ogg"
 UPGRADE_SOUND = "./sound/upgrade.ogg"
-LARGE_ENEMY_FLY_SOUND = "./sound/large_enemy_flying.ogg"
 ME_DOWN_SOUND = "./sound/me_down.ogg"
 
 
@@ -100,6 +99,7 @@ class Enemy:
             "./images/enemy_mid_down2.png",
             "./images/enemy_mid_down3.png",
             "./images/enemy_mid_down4.png"]
+        IMAGE_HIT = "./images/enemy_mid_hit.png"
 
     class Large:
         """
@@ -119,6 +119,8 @@ class Enemy:
             "./images/enemy_large_down4.png",
             "./images/enemy_large_down5.png",
             "./images/enemy_large_down6.png"]
+        IMAGE_HIT = "./images/enemy_large_hit.png"
+        FLY_SOUND = "./sound/large_enemy_flying.ogg"
 
 
 class Color:
