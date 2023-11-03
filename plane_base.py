@@ -7,6 +7,7 @@ from pygame.locals import K_LEFT, K_RIGHT, K_UP, K_DOWN
 
 import const
 from plane_utils import screen, load_img, load_music
+from screen_element import draw_blood_line
 
 
 class Plane(pygame.sprite.Sprite):
@@ -41,8 +42,9 @@ class Plane(pygame.sprite.Sprite):
 
         self.active = True
 
-        self.invincible = False
         self.mask = pygame.mask.from_surface(self.images[0])
+
+        self.const_blood = self.blood = const.PLANE_BLOOD
 
     def move(self):
         """
@@ -73,8 +75,8 @@ class Plane(pygame.sprite.Sprite):
         重置飞机
         """
         self.active = True
-        self.invincible = True
         self.set_plane_location()
+        self.blood = self.const_blood
 
     def check_active(self, switch, delay, enemies):
         """
@@ -84,10 +86,13 @@ class Plane(pygame.sprite.Sprite):
         enemies_down = pygame.sprite.spritecollide(
             self, enemies,
             False, pygame.sprite.collide_mask)
-        if enemies_down and not self.invincible:
-            self.active = False
+        if enemies_down:
             for enemy in enemies_down:
-                enemy.active = False
+                if enemy.blood > 0:
+                    enemy.blood = 0
+                    self.blood -= enemy.damage
+                    if self.blood <= 0:
+                        self.active = False
 
         # 绘制我方飞机
         if self.active:
@@ -95,6 +100,9 @@ class Plane(pygame.sprite.Sprite):
                 screen.blit(self.images[0], self.rect)
             else:
                 screen.blit(self.images[1], self.rect)
+
+            # 绘制血条
+            draw_blood_line(self.rect, 95, self.blood / self.const_blood)
         else:
             # 毁灭
             if not delay % 3:

@@ -8,6 +8,7 @@ import pygame
 import const
 
 from plane_utils import screen, load_img
+from enemy_base import EnemyBase
 
 
 class BulletBase:
@@ -26,14 +27,13 @@ class BulletBase:
         self.speed = 7
         self.active = False
         self.mask = pygame.mask.from_surface(self.image)
-        self.penetrate = False
 
     def damage(self) -> int:
         """
         计算子弹所造成的伤害
         """
         base_damage = random.randint(
-            const.BOMB_DAMAGE_MIN, const.BOMB_DAMAGE_MAX)
+            const.BULLET_DAMAGE_MIN, const.BULLET_DAMAGE_MAX)
         is_crit = random.random() < const.CRIT_RATE
         if is_crit:
             base_damage = base_damage * const.CRIT_DAMAGE
@@ -71,7 +71,12 @@ class BulletBase:
             enemy_hit = pygame.sprite.spritecollide(
                 self, enemies, False, pygame.sprite.collide_mask)
             if enemy_hit:
-                self.active = self.penetrate
-                for enemy in enemy_hit:
-                    enemy.hit = True
-                    enemy.blood -= self.damage()
+                self.active = False
+                self.bullet_hit_event(enemy_hit[0])
+
+    def bullet_hit_event(self, enemy: EnemyBase):
+        """
+        子弹击中事件
+        """
+        enemy.hit = True
+        enemy.blood -= self.damage()

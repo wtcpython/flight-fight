@@ -2,7 +2,8 @@
     常量定义
 """
 
-WINDOW_TITLE = "飞机大战V0.1"
+VERSION = 0.2
+WINDOW_TITLE = f"飞机大战 V{VERSION}"
 
 WINDOW_WIDTH = 658
 WINDOW_HEIGHT = 960
@@ -13,8 +14,8 @@ MY_PLANE_SPEED = 8
 SUPPLY_SPEED = 6
 
 # 基础伤害
-BOMB_DAMAGE_MIN = 15
-BOMB_DAMAGE_MAX = 25
+BULLET_DAMAGE_MIN = 15
+BULLET_DAMAGE_MAX = 25
 
 # 暴击率
 CRIT_RATE = 0.2
@@ -22,7 +23,7 @@ CRIT_RATE = 0.2
 # 暴击伤害
 CRIT_DAMAGE = 2.4
 
-
+PLANE_BLOOD = 10000
 BULLET1_SPEED = 8
 BULLET2_SPEED = 10
 
@@ -72,6 +73,7 @@ class Enemy:
         """
         小飞机
         """
+        DAMAGE = 500
         KILLSCORE = 120
         SPEED = 2
         BLOOD = 20 * 3
@@ -88,6 +90,7 @@ class Enemy:
         """
         中飞机
         """
+        DAMAGE = 700
         KILLSCORE = 230
         SPEED = 1.2
         BLOOD = 20 * 7
@@ -105,6 +108,7 @@ class Enemy:
         """
         大飞机
         """
+        DAMAGE = 1200
         KILLSCORE = 700
         SPEED = 1
         BLOOD = 20 * 18

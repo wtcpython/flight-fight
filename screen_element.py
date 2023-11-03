@@ -3,6 +3,7 @@
 """
 # pylint: disable=c-extension-no-member
 # pylint: disable=no-name-in-module
+import pygame
 
 import const
 from plane_utils import screen, load_img
@@ -29,8 +30,6 @@ def show_bomb_info(bomb_num: int):
     """
     显示当前炸弹数量
     """
-    # 全屏炸弹
-
     screen.blit(bomb_img, (
         const.WINDOW_FRAME_WIDTH,
         const.WINDOW_HEIGHT - const.WINDOW_FRAME_WIDTH - bomb_rect.height))
@@ -47,8 +46,36 @@ def show_bomb_info(bomb_num: int):
 def show_life_num_info(life_num: int):
     """
     显示当前生命数量
+
+    此方法暂时弃用
     """
     for i in range(life_num):
         screen.blit(life_img, (
             const.WINDOW_WIDTH-10-(i % 5 + 1)*life_rect.width,
             const.WINDOW_HEIGHT - 10 - life_rect.height * (i // 5 + 1)))
+
+
+def draw_blood_line(rect: pygame.Rect, offset: int, percent: float):
+    """
+    绘制血条
+    """
+    pygame.draw.line(
+        screen, (0, 0, 0), (rect.left, rect.top + offset),
+        (rect.right, rect.top + offset), 2)
+
+    pygame.draw.line(
+        screen, (0, 255, 0), (rect.left, rect.top + offset),
+        (rect.left + rect.width * percent, rect.top + offset), 2)
+
+
+def show_blood_num(blood: float, const_blood: float):
+    """
+    显示血量数值
+    """
+    text = TextRect(f"{round(blood, 2)} / {const_blood}",
+                    const.Color.BLACK, (0, 0))
+    text.render_text()
+    rect = text.render.get_rect()
+    rect.left, rect.top = (
+        const.WINDOW_WIDTH - rect.width, const.WINDOW_HEIGHT - rect.height)
+    screen.blit(text.render, rect)

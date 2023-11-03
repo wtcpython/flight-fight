@@ -8,6 +8,7 @@ import pygame
 import const
 
 from plane_utils import screen, load_music, load_img
+from screen_element import draw_blood_line
 
 
 class EnemyBase(pygame.sprite.Sprite):
@@ -27,6 +28,7 @@ class EnemyBase(pygame.sprite.Sprite):
 
         self.down_music = load_music(self.enemy_type.ENEMY_DOWN_MUSIC)
 
+        self.damage = self.enemy_type.DAMAGE
         self.kill_score = self.enemy_type.KILLSCORE
 
         self.index = 0
@@ -101,17 +103,9 @@ class EnemyBase(pygame.sprite.Sprite):
                     screen.blit(self.images[switch], self.rect)
                 else:
                     screen.blit(self.images[0], self.rect)
-            pygame.draw.line(
-                screen, (0, 0, 0),
-                (self.rect.left, self.rect.top - 5),
-                (self.rect.right, self.rect.top - 5), 2)
 
-            energy_remain = self.blood / self.const_blood
-            pygame.draw.line(
-                screen, (0, 255, 0),
-                (self.rect.left, self.rect.top - 5),
-                (self.rect.left + self.rect.width * energy_remain,
-                    self.rect.top - 5), 2)
+            # 绘制血条
+            draw_blood_line(self.rect, -5, self.blood / self.const_blood)
 
             # (仅限大型战机) 即将出现在画面中，播放音效
             # 只有大型战机有音乐
