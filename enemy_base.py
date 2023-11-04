@@ -46,6 +46,8 @@ class EnemyBase(pygame.sprite.Sprite):
         self.image_hit = None
         self.fly_sound = None
 
+        self.active = True
+
     def move(self):
         """
         敌机移动
@@ -71,9 +73,34 @@ class EnemyBase(pygame.sprite.Sprite):
         """
         设置敌机位置
         """
-        self.rect.left, self.rect.top = \
-            random.randint(20, const.WINDOW_WIDTH - self.rect.width - 20), \
-            random.randint(-10 * self.rect.height, 0)
+        self.rect.left, self.rect.top = (
+            random.randint(20, const.WINDOW_WIDTH - self.rect.width - 20),
+            random.randint(-10 * self.rect.height, 0))
+
+    def move_center(self):
+        """
+        敌机向屏幕中间移动
+        """
+        if self.enemy_type == const.Enemy.Large:
+            return
+
+        offset = self.enemy_type.OFFSET
+
+        if self.rect.left > const.WINDOW_WIDTH // 2:
+            self.rect.left = max(
+                const.WINDOW_WIDTH // 2, self.rect.left - offset)
+
+        else:
+            self.rect.left = min(
+                const.WINDOW_WIDTH // 2, self.rect.left + offset)
+
+        if self.rect.top > const.WINDOW_HEIGHT // 3:
+            self.rect.top = max(
+                const.WINDOW_HEIGHT // 3, self.rect.top - offset)
+
+        else:
+            self.rect.top = min(
+                const.WINDOW_HEIGHT // 3, self.rect.top + offset)
 
     def reset(self):
         """
@@ -81,6 +108,7 @@ class EnemyBase(pygame.sprite.Sprite):
         """
         self.blood = self.const_blood
         self.set_enemy_location()
+        self.active = True
 
     def draw(self, switch, delay) -> int:
         """
@@ -91,7 +119,7 @@ class EnemyBase(pygame.sprite.Sprite):
 
         返回值为敌机存活状态
         """
-        if self.blood > 0:
+        if self.blood > 0 and self.active:
             self.move()
             if self.hit:
                 if self.image_hit:
@@ -121,8 +149,10 @@ class EnemyBase(pygame.sprite.Sprite):
                 if self.index == 0:
                     if self.fly_sound:
                         self.fly_sound.stop()
+                    if self.blood <= 0:
+                        self.reset()
+                        return self.kill_score
                     self.reset()
-                    return self.kill_score
         return 0
 
     def set_music_volume(self, vol: int):

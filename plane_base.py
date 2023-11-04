@@ -35,7 +35,7 @@ class Plane(pygame.sprite.Sprite, const.Player):
 
         self.index = 0
 
-        self.down_music = load_music(const.ME_DOWN_SOUND)
+        self.collide_music = load_music(const.ME_COLLIDE_SOUND)
 
         self.active = True
 
@@ -75,7 +75,7 @@ class Plane(pygame.sprite.Sprite, const.Player):
         self.set_plane_location()
         self.cur_blood = self.BLOOD
 
-    def check_active(self, switch, delay, enemies):
+    def check_active(self, switch, enemies):
         """
         检查我方飞机是否存活
         """
@@ -85,8 +85,9 @@ class Plane(pygame.sprite.Sprite, const.Player):
             False, pygame.sprite.collide_mask)
         if enemies_down:
             for enemy in enemies_down:
-                if enemy.blood > 0:
-                    enemy.blood = 0
+                if enemy.active:
+                    enemy.active = False
+                    self.collide_music.play()
                     self.cur_blood -= enemy.damage
                     if self.cur_blood <= 0:
                         self.active = False
@@ -100,20 +101,9 @@ class Plane(pygame.sprite.Sprite, const.Player):
 
             # 绘制血条
             draw_blood_line(self.rect, 95, self.cur_blood / self.BLOOD)
-        else:
-            # 毁灭
-            if not delay % 3:
-                if self.index == 0:
-                    self.down_music.play()
-                screen.blit(
-                    self.destroy_images[self.index], self.rect)
-                self.index = (self.index + 1) % len(self.destroy_images)
-                if self.index == 0:
-                    return False
-        return True
 
     def set_music_volume(self, vol: int):
         """
         设置音量
         """
-        self.down_music.set_volume(vol)
+        self.collide_music.set_volume(vol)

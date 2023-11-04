@@ -21,7 +21,7 @@ BG_MUSIC_MAIN = "./sound/bgm.mp3"
 BULLET_SOUND = "./sound/bullet.ogg"
 BOMB_SOUND = "./sound/bomb.ogg"
 UPGRADE_SOUND = "./sound/upgrade.ogg"
-ME_DOWN_SOUND = "./sound/me_down.ogg"
+ME_COLLIDE_SOUND = "./sound/me_collide.ogg"
 SKILL_E_SOUND = "./sound/skill_e.ogg"
 SKILL_Q_SOUND = "./sound/skill_q.ogg"
 
@@ -83,6 +83,7 @@ class Enemy:
             "./images/enemy_small_down2.png",
             "./images/enemy_small_down3.png",
             "./images/enemy_small_down4.png"]
+        OFFSET = 100
 
     class Mid:
         """
@@ -101,6 +102,7 @@ class Enemy:
             "./images/enemy_mid_down3.png",
             "./images/enemy_mid_down4.png"]
         IMAGE_HIT = "./images/enemy_mid_hit.png"
+        OFFSET = 40
 
     class Large:
         """
@@ -123,6 +125,7 @@ class Enemy:
             "./images/enemy_large_down6.png"]
         IMAGE_HIT = "./images/enemy_large_hit.png"
         FLY_SOUND = "./sound/large_enemy_flying.ogg"
+        OFFSET = 0
 
 
 class Color:

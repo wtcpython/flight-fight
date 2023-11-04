@@ -71,7 +71,8 @@ class BulletBase:
                 self, enemies, False, pygame.sprite.collide_mask)
             if enemy_hit:
                 self.active = False
-                self.bullet_hit_event(enemy_hit[0])
+                for enemy in enemy_hit:
+                    self.bullet_hit_event(enemy)
 
     def bullet_hit_event(self, enemy: EnemyBase):
         """

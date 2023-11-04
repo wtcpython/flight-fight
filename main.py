@@ -232,13 +232,14 @@ class Main:
                                 self.bomb_num -= 1
                                 bomb_sound.play()
                                 for each in self.enemies:
-                                    if each.rect.bottom > 0:
+                                    if each.rect.bottom > \
+                                            const.WINDOW_HEIGHT // 3:
                                         each.blood -= 20*7
                                         if each.blood <= 0:
                                             count += 1
                                 count = min(10, count)
                                 self.my_plane.cur_blood += \
-                                    self.my_plane.BLOOD * count / 100
+                                    self.my_plane.BLOOD * count / 250
                                 self.my_plane.cur_blood = min(
                                     self.my_plane.cur_blood,
                                     self.my_plane.BLOOD)
@@ -247,12 +248,18 @@ class Main:
                                 if not self.add_damage:
                                     self.add_damage = True
                                     skill_e_sound.play()
-                                    add = random.choice([10, 20, 25])
+                                    add = random.choice([10, 16, 22])
                                     self.charge = min(100, self.charge + add)
                                     self.my_plane.cur_blood *= 0.7
                                     pygame.time.set_timer(
                                         self.add_bullet_damage_event, 7 * 1000)
                                     const.Player.DAMAGE *= 4
+
+                            elif key == "f" and self.charge > 35:
+                                self.charge -= 35
+                                for enemy in self.enemies:
+                                    if enemy.rect.bottom > 0:
+                                        enemy.move_center()
 
                             elif key == "q":
                                 if not self.super_bullet and \
@@ -344,7 +351,7 @@ class Main:
 
                         # 绘制我方战机：
                         self.my_plane.check_active(
-                            self.switch_image, delay, self.enemies)
+                            self.switch_image, self.enemies)
 
                         # 显示当前炸弹数量
                         show_bomb_info(self.bomb_num)
