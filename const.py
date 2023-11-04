@@ -2,7 +2,7 @@
     常量定义
 """
 
-VERSION = 0.2
+VERSION = 0.3
 WINDOW_TITLE = f"飞机大战 V{VERSION}"
 
 WINDOW_WIDTH = 658
