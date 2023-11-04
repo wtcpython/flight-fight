@@ -10,7 +10,7 @@ from plane_utils import screen, load_img, load_music
 from screen_element import draw_blood_line
 
 
-class Plane(pygame.sprite.Sprite):
+class Plane(pygame.sprite.Sprite, const.Player):
     """
     我方飞机
     """
@@ -37,31 +37,28 @@ class Plane(pygame.sprite.Sprite):
 
         self.down_music = load_music(const.ME_DOWN_SOUND)
 
-        # 移动速度
-        self.speed = const.MY_PLANE_SPEED
-
         self.active = True
 
         self.mask = pygame.mask.from_surface(self.images[0])
 
-        self.const_blood = self.blood = const.PLANE_BLOOD
+        self.cur_blood = self.BLOOD
 
     def move(self):
         """
         键盘控制移动
         """
         pressed = pygame.key.get_pressed()
-        if pressed[K_UP] and self.rect.top > self.speed:
-            self.rect.top -= self.speed
+        if pressed[K_UP] and self.rect.top > self.SPEED:
+            self.rect.top -= self.SPEED
         elif pressed[K_DOWN] and \
-                self.rect.bottom < const.WINDOW_HEIGHT - self.speed:
-            self.rect.top += self.speed
+                self.rect.bottom < const.WINDOW_HEIGHT - self.SPEED:
+            self.rect.top += self.SPEED
         elif pressed[K_LEFT] and \
-                self.rect.left > self.speed:
-            self.rect.left -= self.speed
+                self.rect.left > self.SPEED:
+            self.rect.left -= self.SPEED
         elif pressed[K_RIGHT] and \
-                self.rect.right < const.WINDOW_WIDTH - self.speed:
-            self.rect.right += self.speed
+                self.rect.right < const.WINDOW_WIDTH - self.SPEED:
+            self.rect.right += self.SPEED
 
     def set_plane_location(self):
         """
@@ -76,7 +73,7 @@ class Plane(pygame.sprite.Sprite):
         """
         self.active = True
         self.set_plane_location()
-        self.blood = self.const_blood
+        self.cur_blood = self.BLOOD
 
     def check_active(self, switch, delay, enemies):
         """
@@ -90,8 +87,8 @@ class Plane(pygame.sprite.Sprite):
             for enemy in enemies_down:
                 if enemy.blood > 0:
                     enemy.blood = 0
-                    self.blood -= enemy.damage
-                    if self.blood <= 0:
+                    self.cur_blood -= enemy.damage
+                    if self.cur_blood <= 0:
                         self.active = False
 
         # 绘制我方飞机
@@ -102,7 +99,7 @@ class Plane(pygame.sprite.Sprite):
                 screen.blit(self.images[1], self.rect)
 
             # 绘制血条
-            draw_blood_line(self.rect, 95, self.blood / self.const_blood)
+            draw_blood_line(self.rect, 95, self.cur_blood / self.BLOOD)
         else:
             # 毁灭
             if not delay % 3:

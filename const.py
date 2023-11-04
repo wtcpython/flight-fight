@@ -10,22 +10,10 @@ WINDOW_HEIGHT = 960
 
 WINDOW_FRAME_WIDTH = 10
 
-MY_PLANE_SPEED = 8
 SUPPLY_SPEED = 6
 
-# 基础伤害
-BULLET_DAMAGE_MIN = 15
-BULLET_DAMAGE_MAX = 25
-
-# 暴击率
-CRIT_RATE = 0.2
-
-# 暴击伤害
-CRIT_DAMAGE = 2.4
-
-PLANE_BLOOD = 10000
-BULLET1_SPEED = 8
-BULLET2_SPEED = 10
+# 子弹移动速度
+BULLET_SPEED = 7
 
 
 # 音乐和音效
@@ -37,6 +25,17 @@ GET_BOMB_SOUND = "./sound/get_bomb.ogg"
 GET_BULLET_SOUND = "./sound/get_bullet.ogg"
 UPGRADE_SOUND = "./sound/upgrade.ogg"
 ME_DOWN_SOUND = "./sound/me_down.ogg"
+
+
+class Player:
+    """
+    玩家数据
+    """
+    BLOOD = 10000  # 生命值
+    DAMAGE = 20  # 攻击力
+    CRIT_RATE = 0.2  # 暴击率
+    CRIT_DAMAGE = 2.4  # 暴击伤害
+    SPEED = 8  # 移动速度
 
 
 class Status:

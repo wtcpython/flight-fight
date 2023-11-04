@@ -24,7 +24,7 @@ class BulletBase:
         self.rect = self.image.get_rect()
         self.init_pos = pos
         self.set_bullet_location(pos)
-        self.speed = 7
+        self.speed = const.BULLET_SPEED
         self.active = False
         self.mask = pygame.mask.from_surface(self.image)
 
@@ -32,11 +32,10 @@ class BulletBase:
         """
         计算子弹所造成的伤害
         """
-        base_damage = random.randint(
-            const.BULLET_DAMAGE_MIN, const.BULLET_DAMAGE_MAX)
-        is_crit = random.random() < const.CRIT_RATE
+        base_damage = const.Player.DAMAGE
+        is_crit = random.random() < const.Player.CRIT_RATE
         if is_crit:
-            base_damage = base_damage * const.CRIT_DAMAGE
+            base_damage *= const.Player.CRIT_DAMAGE
         return base_damage
 
     def move(self):

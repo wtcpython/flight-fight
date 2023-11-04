@@ -102,7 +102,6 @@ class Main:
         """
 
         self.my_plane.reset()
-        # self.my_plane.invincible = False
 
         # 清空敌机里现有的飞机
         self.enemies.empty()
@@ -240,22 +239,20 @@ class Main:
                                         each.blood -= 20*7
                                         if each.blood <= 0:
                                             count += 1
-                                count = 10 if count > 10 else count
-                                self.my_plane.blood += \
-                                    self.my_plane.const_blood * count / 100
-                                if self.my_plane.blood > \
-                                        self.my_plane.const_blood:
-                                    self.my_plane.blood = \
-                                        self.my_plane.const_blood
+                                count = min(10, count)
+                                self.my_plane.cur_blood += \
+                                    self.my_plane.BLOOD * count / 100
+                                self.my_plane.cur_blood = min(
+                                    self.my_plane.cur_blood,
+                                    self.my_plane.BLOOD)
 
                             elif key == "e":
                                 if not self.add_damage:
                                     self.add_damage = True
-                                    self.my_plane.blood *= 0.7
+                                    self.my_plane.cur_blood *= 0.7
                                     pygame.time.set_timer(
                                         self.add_bullet_damage_event, 7 * 1000)
-                                    const.BULLET_DAMAGE_MIN *= 4
-                                    const.BULLET_DAMAGE_MAX *= 4
+                                    const.Player.DAMAGE *= 4
 
                         elif self.status == const.Status.LOGIN:
                             if event.key in [
@@ -279,8 +276,7 @@ class Main:
                         pygame.time.set_timer(self.double_bullet_time, 0)
                     case self.add_bullet_damage_event:
                         self.add_damage = False
-                        const.BULLET_DAMAGE_MIN //= 4
-                        const.BULLET_DAMAGE_MAX //= 4
+                        const.Player.DAMAGE //= 4
                         pygame.time.set_timer(self.add_bullet_damage_event, 0)
 
             match self.status:
@@ -296,7 +292,7 @@ class Main:
                     # 分数信息
                     show_score(self.score)
 
-                    if self.my_plane.blood > 0:
+                    if self.my_plane.cur_blood > 0:
                         self.my_plane.move()
 
                         # 绘制全屏炸弹补给并检测是否获得
@@ -364,7 +360,7 @@ class Main:
 
                         # 绘制剩余血量数值
                         show_blood_num(
-                            self.my_plane.blood, self.my_plane.const_blood)
+                            self.my_plane.cur_blood, self.my_plane.BLOOD)
                     else:
                         # 背景音乐停止
                         pygame.mixer.music.fadeout(500)
