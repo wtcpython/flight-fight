@@ -21,8 +21,8 @@ from plane_utils import (
 
 from bullet_base import BulletBase
 from plane_base import Plane
-from supply_base import BulletSupply, BombSupply
-from screen_element import show_score, show_bomb_info, show_blood_num
+from screen_element import (
+    show_final_charge, show_score, show_bomb_info, show_blood_num)
 from volume_control import VolumeControlBase
 from login_box import LoginBox
 from text_rect import TextRect
@@ -32,9 +32,10 @@ pygame.mixer.init()
 
 bullet_sound = load_music("./sound/bullet.ogg")
 bomb_sound = load_music("./sound/use_bomb.ogg")
-supply_sound = load_music("./sound/supply.ogg")
+skill_e_sound = load_music("./sound/skill_e.ogg")
+skill_q_sound = load_music("./sound/skill_q.ogg")
 
-sound_list = [bullet_sound, bomb_sound, supply_sound]
+sound_list = [bullet_sound, bomb_sound, skill_e_sound, skill_q_sound]
 
 
 class Main:
@@ -56,13 +57,10 @@ class Main:
         self.big_enemies = pygame.sprite.Group()
 
         # 特殊事件
-        self.bullet_supply = BulletSupply()
-        self.bomb_supply = BombSupply()
-
-        self.supply_time = pygame.constants.USEREVENT
-        self.double_bullet_time = pygame.constants.USEREVENT + 1
-        self.add_bullet_damage_event = pygame.constants.USEREVENT + 2
+        self.super_bullet_event = pygame.constants.USEREVENT
+        self.add_bullet_damage_event = pygame.constants.USEREVENT + 1
         self.add_damage = False
+        self.charge = 0
         self.switch_image = True
 
         # 暂停初始化
@@ -198,7 +196,7 @@ class Main:
                         self.check_paused()
 
                         if self.status == const.Status.PLAY:
-                            if self.my_plane.blood <= 0:
+                            if self.my_plane.cur_blood <= 0:
                                 if again_rect.collidepoint(event.pos):
                                     self.init_game(data[mode])
                                     self.status = const.Status.PLAY
@@ -218,8 +216,7 @@ class Main:
                                 self.my_plane.set_music_volume(snd)
                                 for enemy in self.enemies:
                                     enemy.set_music_volume(snd)
-                                self.bomb_supply.set_music_volume(snd)
-                                self.bullet_supply.set_music_volume(snd)
+
                                 for i in sound_list:
                                     i.set_volume(snd)
 
@@ -249,10 +246,22 @@ class Main:
                             elif key == "e":
                                 if not self.add_damage:
                                     self.add_damage = True
+                                    skill_e_sound.play()
+                                    add = random.choice([10, 20, 25])
+                                    self.charge = min(100, self.charge + add)
                                     self.my_plane.cur_blood *= 0.7
                                     pygame.time.set_timer(
                                         self.add_bullet_damage_event, 7 * 1000)
                                     const.Player.DAMAGE *= 4
+
+                            elif key == "q":
+                                if not self.super_bullet and \
+                                        self.charge == 100:
+                                    self.super_bullet = True
+                                    skill_q_sound.play()
+                                    self.charge = 0
+                                    pygame.time.set_timer(
+                                        self.super_bullet_event, 14 * 1000)
 
                         elif self.status == const.Status.LOGIN:
                             if event.key in [
@@ -265,15 +274,10 @@ class Main:
                                 self.status = const.Status.PLAY
                                 self.current_pause_image = self.pause_images[0]
                             self.login_box.check_event(event)
-                    case self.supply_time:
-                        supply_sound.play()
-                        if random.randint(0, 1):
-                            self.bomb_supply.reset()
-                        else:
-                            self.bullet_supply.reset()
-                    case self.double_bullet_time:
+
+                    case self.super_bullet_event:
                         self.super_bullet = False
-                        pygame.time.set_timer(self.double_bullet_time, 0)
+                        pygame.time.set_timer(self.super_bullet_event, 0)
                     case self.add_bullet_damage_event:
                         self.add_damage = False
                         const.Player.DAMAGE //= 4
@@ -285,8 +289,6 @@ class Main:
                     if not pygame.mixer.music.get_busy():
                         pygame.mixer.music.unpause()
 
-                    # 每28秒发放一个补给包
-                    pygame.time.set_timer(self.supply_time, 2 * 1000)
                     screen.blit(self.current_pause_image, self.pause_rect)
 
                     # 分数信息
@@ -294,20 +296,6 @@ class Main:
 
                     if self.my_plane.cur_blood > 0:
                         self.my_plane.move()
-
-                        # 绘制全屏炸弹补给并检测是否获得
-                        if self.bomb_supply.check_active(self.my_plane):
-                            # 有小概率加2个
-                            bomb_get = random.randint(0, 20)
-                            self.bomb_num += 2 if bomb_get <= 7 else 1
-                            self.bomb_supply.active = False
-
-                        # 绘制超级子弹补给并检测是否获得
-                        if self.bullet_supply.check_active(self.my_plane):
-                            self.super_bullet = True
-                            pygame.time.set_timer(
-                                self.double_bullet_time, 25 * 1000)
-                            self.bullet_supply.active = False
 
                         # 发射子弹
                         if not delay % 10 or "normal_bullet" not in locals():
@@ -340,8 +328,11 @@ class Main:
                                 each.draw(self.switch_image, delay)
                             if add_score:
                                 self.score += add_score
-                                if random.random() < 0.5:
+                                r = random.random()
+                                if r < 0.3:
                                     self.bomb_num += 1
+                                elif r < 0.4 and self.add_damage:
+                                    self.charge = min(100, self.charge + 10)
 
                         # 绘制中型敌机：
                         for each in self.mid_enemies:
@@ -361,13 +352,14 @@ class Main:
                         # 绘制剩余血量数值
                         show_blood_num(
                             self.my_plane.cur_blood, self.my_plane.BLOOD)
+
+                        show_final_charge(self.charge)
                     else:
                         # 背景音乐停止
                         pygame.mixer.music.fadeout(500)
                         # 停止全部音效
                         pygame.mixer.fadeout(500)
-                        # 停止发放补给
-                        pygame.time.set_timer(self.supply_time, 0)
+
                         if not recorded:
                             recorded = True
                             # 读取历史最高得分
@@ -442,12 +434,12 @@ class Main:
     def check_paused(self):
         if self.status != const.Status.PLAY:
             self.current_pause_image = self.pause_images[3]
-            pygame.time.set_timer(self.supply_time, 0)
+
             pygame.mixer.music.pause()
             pygame.mixer.pause()
         else:
             self.current_pause_image = self.pause_images[1]
-            pygame.time.set_timer(self.supply_time, 2 * 1000)
+
             pygame.mixer.music.unpause()
             pygame.mixer.unpause()
 

@@ -20,11 +20,10 @@ BULLET_SPEED = 7
 BG_MUSIC_MAIN = "./sound/bgm.mp3"
 BULLET_SOUND = "./sound/bullet.ogg"
 BOMB_SOUND = "./sound/bomb.ogg"
-SUPPLY_SOUND = "./sound/supply.ogg"
-GET_BOMB_SOUND = "./sound/get_bomb.ogg"
-GET_BULLET_SOUND = "./sound/get_bullet.ogg"
 UPGRADE_SOUND = "./sound/upgrade.ogg"
 ME_DOWN_SOUND = "./sound/me_down.ogg"
+SKILL_E_SOUND = "./sound/skill_e.ogg"
+SKILL_Q_SOUND = "./sound/skill_q.ogg"
 
 
 class Player:

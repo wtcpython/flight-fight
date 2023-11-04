@@ -43,18 +43,6 @@ def show_bomb_info(bomb_num: int):
             const.WINDOW_HEIGHT - const.WINDOW_FRAME_WIDTH - rect.height))
 
 
-def show_life_num_info(life_num: int):
-    """
-    显示当前生命数量
-
-    此方法暂时弃用
-    """
-    for i in range(life_num):
-        screen.blit(life_img, (
-            const.WINDOW_WIDTH-10-(i % 5 + 1)*life_rect.width,
-            const.WINDOW_HEIGHT - 10 - life_rect.height * (i // 5 + 1)))
-
-
 def draw_blood_line(rect: pygame.Rect, offset: int, percent: float):
     """
     绘制血条
@@ -79,3 +67,24 @@ def show_blood_num(blood: float, const_blood: float):
     rect.left, rect.top = (
         const.WINDOW_WIDTH - rect.width, const.WINDOW_HEIGHT - rect.height)
     screen.blit(text.render, rect)
+
+
+def show_final_charge(percent: int):
+    """
+    显示充能
+    """
+    radius = 70
+
+    center_pos = (
+        const.WINDOW_WIDTH - radius - 10,
+        const.WINDOW_HEIGHT - radius * 2)
+
+    text = TextRect(f"{percent} %", const.Color.RED, center_pos)
+    rect = (const.WINDOW_WIDTH - radius * 2 - 10,
+            const.WINDOW_HEIGHT - radius * 3,
+            radius * 2, radius * 2)
+    if percent:
+        pygame.draw.arc(screen, const.Color.RED, rect,
+                        0, 3.14 * percent / 50, 2)
+
+    screen.blit(text.get_surface(), text.get_rect())
