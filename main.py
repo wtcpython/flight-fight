@@ -7,6 +7,7 @@
 # python 自带模块加载
 import sys
 import random
+import time
 
 # 第三方模块加载
 import pygame
@@ -22,7 +23,8 @@ from plane_utils import (
 from bullet_base import BulletBase
 from plane_base import Plane
 from screen_element import (
-    show_final_charge, show_score, show_bomb_info, show_blood_num)
+    show_final_charge, show_score, show_bomb_info, show_blood_num,
+    show_small_skill_charge)
 from volume_control import VolumeControlBase
 from login_box import LoginBox
 from text_rect import TextRect
@@ -59,7 +61,7 @@ class Main:
         # 特殊事件
         self.super_bullet_event = pygame.constants.USEREVENT
         self.add_bullet_damage_event = pygame.constants.USEREVENT + 1
-        self.add_damage = False
+        self.old_charge = 0
         self.charge = 0
         self.switch_image = True
 
@@ -94,6 +96,9 @@ class Main:
         self.score = 0
         self.bomb_num = 0
 
+        self.time = 0
+        self.e_percent = 0
+
     def init_game(self, data_mode):
         """
         游戏数据初始化
@@ -111,6 +116,7 @@ class Main:
         self.increase_enemies(15, 6, 2)
 
         self.score = 0
+        self.charge = 0
 
         # 游戏主音乐加载
         pygame.mixer.music.load("./sound/bgm.mp3")
@@ -245,8 +251,10 @@ class Main:
                                     self.my_plane.BLOOD)
 
                             elif key == "e":
-                                if not self.add_damage:
-                                    self.add_damage = True
+                                if self.e_percent == 100:
+                                    self.e_percent = 0
+
+                                    self.time = time.time()
                                     skill_e_sound.play()
                                     add = random.choice([10, 16, 22])
                                     self.charge = min(100, self.charge + add)
@@ -280,13 +288,13 @@ class Main:
                                 self.loggedin = True
                                 self.status = const.Status.PLAY
                                 self.current_pause_image = self.pause_images[0]
+                                self.time = time.time()
                             self.login_box.check_event(event)
 
                     case self.super_bullet_event:
                         self.super_bullet = False
                         pygame.time.set_timer(self.super_bullet_event, 0)
                     case self.add_bullet_damage_event:
-                        self.add_damage = False
                         const.Player.DAMAGE //= 4
                         pygame.time.set_timer(self.add_bullet_damage_event, 0)
 
@@ -338,7 +346,7 @@ class Main:
                                 r = random.random()
                                 if r < 0.3:
                                     self.bomb_num += 1
-                                elif r < 0.4 and self.add_damage:
+                                elif r < 0.4:
                                     self.charge = min(100, self.charge + 10)
 
                         # 绘制中型敌机：
@@ -360,7 +368,20 @@ class Main:
                         show_blood_num(
                             self.my_plane.cur_blood, self.my_plane.BLOOD)
 
-                        show_final_charge(self.charge)
+                        self.e_percent = int(
+                            (time.time() - self.time) /
+                            const.Player.E_LOAD_TIME * 100)
+                        self.e_percent = min(self.e_percent, 100)
+
+                        load_charge = int(
+                            (self.charge - self.old_charge) *
+                            (time.time() - self.time) /
+                            const.Player.Q_SHOW_ANI_TIME + self.old_charge)
+
+                        show_small_skill_charge(self.e_percent)
+                        show_final_charge(load_charge)
+                        if load_charge >= self.charge:
+                            self.old_charge = self.charge
                     else:
                         # 背景音乐停止
                         pygame.mixer.music.fadeout(500)

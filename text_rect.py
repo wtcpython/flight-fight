@@ -6,19 +6,20 @@ import pygame
 
 import const
 
-font = pygame.font.Font("./msyhbd.ttc", 32)
-
 
 class TextRect:
     """
     Pygame 文本显示
     """
     def __init__(self, text: str, color: const.Color | pygame.Color,
-                 center_postition: tuple[int, int]):
+                 center_postition: tuple[int, int],
+                 font_size: int = 32):
         self.text = text
         self.color = color
 
         self.center_position = center_postition
+
+        self.font_size = font_size
 
         self.render = None
 
@@ -38,6 +39,7 @@ class TextRect:
         """
         字体渲染
         """
+        font = pygame.font.Font("./msyhbd.ttc", self.font_size)
         self.render = font.render(self.text, True, self.color)
 
     def get_surface(self) -> pygame.surface.Surface:

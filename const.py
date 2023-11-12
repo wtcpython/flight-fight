@@ -35,6 +35,8 @@ class Player:
     CRIT_RATE = 0.2  # 暴击率
     CRIT_DAMAGE = 2.4  # 暴击伤害
     SPEED = 8  # 移动速度
+    E_LOAD_TIME = 10  # E技能加载时间
+    Q_SHOW_ANI_TIME = 2  # Q技能充能动画时间
 
 
 class Status:

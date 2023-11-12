@@ -69,22 +69,49 @@ def show_blood_num(blood: float, const_blood: float):
     screen.blit(text.render, rect)
 
 
-def show_final_charge(percent: int):
+def show_small_skill_charge(percent: int):
+    """
+    显示E技能剩余时间
+    """
+    radius = 50
+
+    center_pos = (
+        const.WINDOW_WIDTH - radius - 10,
+        const.WINDOW_HEIGHT - radius * 4 - 10)
+
+    text = TextRect("E", const.Color.BLACK, center_pos, 20)
+    rect = (const.WINDOW_WIDTH - radius * 2 - 10,
+            const.WINDOW_HEIGHT - radius * 5 - 10,
+            radius * 2, radius * 2)
+
+    pygame.draw.arc(screen, const.Color.BLACK, rect,
+                    0, 3.14 * 2, 1)
+
+    pygame.draw.arc(screen, const.Color.RED, rect,
+                    0, 3.14 * percent / 50, 2)
+
+    screen.blit(text.get_surface(), text.get_rect())
+
+
+def show_final_charge(load_charge: int):
     """
     显示充能
     """
-    radius = 70
+    radius = 50
 
     center_pos = (
         const.WINDOW_WIDTH - radius - 10,
         const.WINDOW_HEIGHT - radius * 2)
 
-    text = TextRect(f"{percent} %", const.Color.RED, center_pos)
+    text = TextRect("Q", const.Color.BLACK, center_pos, 20)
     rect = (const.WINDOW_WIDTH - radius * 2 - 10,
             const.WINDOW_HEIGHT - radius * 3,
             radius * 2, radius * 2)
-    if percent:
-        pygame.draw.arc(screen, const.Color.RED, rect,
-                        0, 3.14 * percent / 50, 2)
+
+    pygame.draw.arc(screen, const.Color.BLACK, rect,
+                    0, 3.14 * 2, 1)
+
+    pygame.draw.arc(screen, const.Color.RED, rect,
+                    0, 3.14 * load_charge / 50, 2)
 
     screen.blit(text.get_surface(), text.get_rect())
