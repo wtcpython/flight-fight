@@ -61,11 +61,12 @@ def show_blood_num(blood: float, const_blood: float):
     显示血量数值
     """
     text = TextRect(f"{round(blood, 2)} / {const_blood}",
-                    const.Color.BLACK, (0, 0))
+                    const.Color.BLACK, (0, 0), 16)
     text.render_text()
     rect = text.render.get_rect()
     rect.left, rect.top = (
-        const.WINDOW_WIDTH - rect.width, const.WINDOW_HEIGHT - rect.height)
+        const.WINDOW_WIDTH - rect.width - const.WINDOW_FRAME_WIDTH,
+        const.WINDOW_HEIGHT - rect.height - const.WINDOW_FRAME_WIDTH)
     screen.blit(text.render, rect)
 
 
