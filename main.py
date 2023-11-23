@@ -158,10 +158,8 @@ class Main:
         bullet_index = 0
 
         # 高级暂停操作、音量调节
-        volume_control = VolumeControlBase(
-            "音量", 0, const.WINDOW_HEIGHT // 3)
-        sound_control = VolumeControlBase(
-            "音效", 0, const.WINDOW_HEIGHT // 3 + 60)
+        volume_control = VolumeControlBase("音量", const.WINDOW_HEIGHT // 3)
+        sound_control = VolumeControlBase("音效", const.WINDOW_HEIGHT // 3 + 60)
 
         # 用于阻止重复打开记录文件
         recorded = False

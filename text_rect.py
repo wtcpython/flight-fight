@@ -11,8 +11,9 @@ class TextRect:
     """
     Pygame 文本显示
     """
-    def __init__(self, text: str, color: const.Color | pygame.Color,
-                 center_postition: tuple[int, int],
+    def __init__(self, text: str,
+                 color: const.Color | pygame.Color = const.Color.WHITE,
+                 center_postition: tuple[int, int] = (0, 0),
                  font_size: int = 32):
         self.text = text
         self.color = color
