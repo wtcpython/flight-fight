@@ -13,8 +13,8 @@ import const
 from plane_utils import screen
 from text_rect import TextRect
 
-COLOR_INACTIVE = pygame.Color('lightskyblue3')
-COLOR_ACTIVE = pygame.Color('dodgerblue2')
+COLOR_ACTIVE = pygame.color.Color("#0AFFE9")
+COLOR_INACTIVE = pygame.color.Color("#D2FFFA")
 
 
 class LoginBox():
