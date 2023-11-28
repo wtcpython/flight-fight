@@ -41,31 +41,31 @@ class Plane(pygame.sprite.Sprite, const.Player):
 
         self.mask = pygame.mask.from_surface(self.images[0])
 
-        self.cur_blood = self.BLOOD
+        self.cur_blood = self.Blood
 
     def move(self):
         """
         键盘控制移动
         """
         pressed = pygame.key.get_pressed()
-        if pressed[K_UP] and self.rect.top > self.SPEED:
-            self.rect.top -= self.SPEED
+        if pressed[K_UP] and self.rect.top > self.Speed:
+            self.rect.top -= self.Speed
         elif pressed[K_DOWN] and \
-                self.rect.bottom < const.WINDOW_HEIGHT - self.SPEED:
-            self.rect.top += self.SPEED
+                self.rect.bottom < const.Window.Height - self.Speed:
+            self.rect.top += self.Speed
         elif pressed[K_LEFT] and \
-                self.rect.left > self.SPEED:
-            self.rect.left -= self.SPEED
+                self.rect.left > self.Speed:
+            self.rect.left -= self.Speed
         elif pressed[K_RIGHT] and \
-                self.rect.right < const.WINDOW_WIDTH - self.SPEED:
-            self.rect.right += self.SPEED
+                self.rect.right < const.Window.Width - self.Speed:
+            self.rect.right += self.Speed
 
     def set_plane_location(self):
         """
         将我方飞机放置于屏幕正中央下方
         """
-        self.rect.center = (const.WINDOW_WIDTH // 2,
-                            const.WINDOW_HEIGHT - self.rect.height // 2)
+        self.rect.center = (const.Window.Width // 2,
+                            const.Window.Height - self.rect.height // 2)
 
     def reset(self):
         """
@@ -73,7 +73,7 @@ class Plane(pygame.sprite.Sprite, const.Player):
         """
         self.active = True
         self.set_plane_location()
-        self.cur_blood = self.BLOOD
+        self.cur_blood = self.Blood
 
     def check_active(self, switch, enemies):
         """
@@ -100,7 +100,7 @@ class Plane(pygame.sprite.Sprite, const.Player):
                 screen.blit(self.images[1], self.rect)
 
             # 绘制血条
-            draw_blood_line(self.rect, 95, self.cur_blood / self.BLOOD)
+            draw_blood_line(self.rect, 95, self.cur_blood / self.Blood)
 
     def set_music_volume(self, vol: int):
         """

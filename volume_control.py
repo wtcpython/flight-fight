@@ -16,7 +16,7 @@ class VolumeControlBase():
         # 默认音量为 20%
         self.value = 0.2
 
-        self.volume_text = TextRect(content, const.Color.WHITE, (0, 0))
+        self.volume_text = TextRect(content, const.Color.White, (0, 0))
         self.volume_rect = self.volume_text.get_rect()
 
         self.volume_frame = pygame.Rect(0, 0, 301, self.volume_rect.height)
@@ -25,7 +25,7 @@ class VolumeControlBase():
             0, 0, self.value * 300, self.volume_rect.height)
 
         self.percent_show = TextRect(
-            f"{int(self.value * 100)}", const.Color.WHITE, (0, 0))
+            f"{int(self.value * 100)}", const.Color.White, (0, 0))
         self.percent_show_rect = self.percent_show.get_rect()
 
         self.width = (
@@ -34,7 +34,7 @@ class VolumeControlBase():
             self.percent_show_rect.width)
 
         self.volume_rect.left, self.volume_rect.top = (
-            (const.WINDOW_WIDTH - self.width) // 2, top)
+            (const.Window.Width - self.width) // 2, top)
         self.volume_frame.left, self.volume_frame.top = (
             self.volume_rect.right + 10, self.volume_rect.top)
         self.volume_full.left, self.volume_full.top = (

@@ -45,7 +45,7 @@ class Main:
     plft
     """
     def __init__(self):
-        pygame.display.set_caption(const.WINDOW_TITLE)
+        pygame.display.set_caption(const.Window.Title)
         # 基本框架
 
         self.background = load_img("./images/background.png")
@@ -75,8 +75,9 @@ class Main:
 
         self.pause_rect = self.pause_images[0].get_rect()
 
-        self.pause_rect.left, self.pause_rect.top = \
-            const.WINDOW_WIDTH - self.pause_rect.width - 10, 10
+        self.pause_rect.topleft = (
+                const.Window.Width - self.pause_rect.width - \
+                const.Window.FrameWidth, const.Window.FrameWidth)
 
         self.current_pause_image = self.pause_images[0]
         self.clock = pygame.time.Clock()
@@ -87,7 +88,7 @@ class Main:
         # 是否超级子弹
         self.super_bullet = False
 
-        self.status = const.Status.LOGIN
+        self.status = const.Status.Login
 
         self.account = ""
         self.loggedin = False
@@ -137,29 +138,29 @@ class Main:
             text = "登   录"
 
         login_title = TextRect(
-            text, const.Color.WHITE,
-            (const.WINDOW_WIDTH // 2, const.WINDOW_FRAME_WIDTH * 5))
+            text, const.Color.White,
+            (const.Window.Width // 2, const.Window.FrameWidth * 5))
 
         data = read_json("./userdata/all_users.json")
 
         # 生成普通子弹、超级子弹
         bullet_length = 30
         normal_bullet = [BulletBase(self.my_plane.rect.midtop,
-                                    const.BulletType.NORMAL)
+                                    const.BulletType.Normal)
                          for _ in range(bullet_length)]
 
         plus_bullet = [[
             BulletBase((self.my_plane.rect.centerx - 33,
-                        self.my_plane.rect.centery), const.BulletType.PLUS),
-            BulletBase(self.my_plane.rect.midtop, const.BulletType.PLUS),
+                        self.my_plane.rect.centery), const.BulletType.Plus),
+            BulletBase(self.my_plane.rect.midtop, const.BulletType.Plus),
             BulletBase((self.my_plane.rect.centerx + 30,
-                        self.my_plane.rect.centery), const.BulletType.PLUS)]
+                        self.my_plane.rect.centery), const.BulletType.Plus)]
                        for _ in range(bullet_length)]
         bullet_index = 0
 
         # 高级暂停操作、音量调节
-        volume_control = VolumeControlBase("音量", const.WINDOW_HEIGHT // 3)
-        sound_control = VolumeControlBase("音效", const.WINDOW_HEIGHT // 3 + 60)
+        volume_control = VolumeControlBase("音量", const.Window.Height // 3)
+        sound_control = VolumeControlBase("音效", const.Window.Height // 3 + 60)
 
         # 用于阻止重复打开记录文件
         recorded = False
@@ -192,23 +193,23 @@ class Main:
                     case pygame.constants.MOUSEBUTTONDOWN:
                         if self.loggedin and \
                                 self.pause_rect.collidepoint(event.pos):
-                            if self.status == const.Status.PLAY:
-                                self.status = const.Status.PAUSE
+                            if self.status == const.Status.Play:
+                                self.status = const.Status.Pause
                             else:
-                                self.status = const.Status.PLAY
+                                self.status = const.Status.Play
 
                         self.check_paused()
 
-                        if self.status == const.Status.PLAY:
+                        if self.status == const.Status.Play:
                             if self.my_plane.cur_blood <= 0:
                                 if again_rect.collidepoint(event.pos):
                                     self.init_game(data[mode])
-                                    self.status = const.Status.PLAY
+                                    self.status = const.Status.Play
                                 elif exit_rect.collidepoint(event.pos):
                                     pygame.base.quit()
                                     sys.exit()
 
-                        elif self.status == const.Status.PAUSE:
+                        elif self.status == const.Status.Pause:
                             # 设置音量
                             if volume_control.check(event.pos):
                                 pygame.mixer.music.set_volume(
@@ -224,12 +225,12 @@ class Main:
                                 for i in sound_list:
                                     i.set_volume(snd)
 
-                        elif self.status == const.Status.LOGIN:
+                        elif self.status == const.Status.Login:
                             self.login_box.check_event(event)
 
                     # 定义超级炸弹的伤害
                     case pygame.constants.KEYDOWN:
-                        if self.status == const.Status.PLAY:
+                        if self.status == const.Status.Play:
                             key = pygame.key.name(event.key)
                             if key == "space" and self.bomb_num:
                                 count = 0
@@ -237,16 +238,16 @@ class Main:
                                 bomb_sound.play()
                                 for each in self.enemies:
                                     if each.rect.bottom > \
-                                            const.WINDOW_HEIGHT // 3:
+                                            const.Window.Height // 3:
                                         each.blood -= 20*7
                                         if each.blood <= 0:
                                             count += 1
                                 count = min(10, count)
                                 self.my_plane.cur_blood += \
-                                    self.my_plane.BLOOD * count / 250
+                                    self.my_plane.Blood * count / 250
                                 self.my_plane.cur_blood = min(
                                     self.my_plane.cur_blood,
-                                    self.my_plane.BLOOD)
+                                    self.my_plane.Blood)
 
                             elif key == "e":
                                 if self.e_percent == 100:
@@ -259,7 +260,7 @@ class Main:
                                     self.my_plane.cur_blood *= 0.7
                                     pygame.time.set_timer(
                                         self.add_bullet_damage_event, 7 * 1000)
-                                    const.Player.DAMAGE *= 4
+                                    const.Player.Damage *= 4
 
                             elif key == "f" and self.charge > 35:
                                 self.charge -= 35
@@ -276,7 +277,7 @@ class Main:
                                     pygame.time.set_timer(
                                         self.super_bullet_event, 14 * 1000)
 
-                        elif self.status == const.Status.LOGIN:
+                        elif self.status == const.Status.Login:
                             if event.key in [
                                     pygame.constants.K_RETURN,
                                     pygame.constants.K_KP_ENTER]:
@@ -284,7 +285,7 @@ class Main:
                                 login_title.set_text(
                                     f"Welcome,{self.account} !")
                                 self.loggedin = True
-                                self.status = const.Status.PLAY
+                                self.status = const.Status.Play
                                 self.current_pause_image = self.pause_images[0]
                                 self.time = time.time()
                             self.login_box.check_event(event)
@@ -293,11 +294,11 @@ class Main:
                         self.super_bullet = False
                         pygame.time.set_timer(self.super_bullet_event, 0)
                     case self.add_bullet_damage_event:
-                        const.Player.DAMAGE //= 4
+                        const.Player.Damage //= 4
                         pygame.time.set_timer(self.add_bullet_damage_event, 0)
 
             match self.status:
-                case const.Status.PLAY:
+                case const.Status.Play:
                     # 播放音乐
                     if not pygame.mixer.music.get_busy():
                         pygame.mixer.music.unpause()
@@ -364,17 +365,17 @@ class Main:
 
                         # 绘制剩余血量数值
                         show_blood_num(
-                            self.my_plane.cur_blood, self.my_plane.BLOOD)
+                            self.my_plane.cur_blood, self.my_plane.Blood)
 
                         self.e_percent = int(
                             (time.time() - self.time) /
-                            const.Player.E_LOAD_TIME * 100)
+                            const.Player.ELoadTime * 100)
                         self.e_percent = min(self.e_percent, 100)
 
                         load_charge = int(
                             (self.charge - self.old_charge) *
                             (time.time() - self.time) /
-                            const.Player.Q_SHOW_ANI_TIME + self.old_charge)
+                            const.Player.QShowAnimationTime + self.old_charge)
 
                         show_small_skill_charge(self.e_percent)
                         show_final_charge(load_charge)
@@ -400,36 +401,36 @@ class Main:
                         # 绘制结束画面
                         game_over = TextRect(
                             "Win!" if self.score >= data[mode]["MinimumScore"]
-                            else "Lose!", const.Color.WHITE,
-                            (const.WINDOW_WIDTH // 2, 150))
+                            else "Lose!", const.Color.White,
+                            (const.Window.Width // 2, 150))
                         game_over_rect = game_over.get_rect()
                         screen.blit(game_over.get_surface(), game_over_rect)
 
                         best_score = TextRect(
-                            f"Best : {record_score}", const.Color.WHITE,
-                            (const.WINDOW_WIDTH // 2, 100))
+                            f"Best : {record_score}", const.Color.White,
+                            (const.Window.Width // 2, 100))
                         screen.blit(best_score.get_surface(),
                                     best_score.get_rect())
 
-                        again_rect.left, again_rect.top = (
-                            (const.WINDOW_WIDTH - again_rect.width) // 2,
-                            (const.WINDOW_HEIGHT - again_rect.height)
+                        again_rect.topleft = (
+                            (const.Window.Width - again_rect.width) // 2,
+                            (const.Window.Height - again_rect.height)
                             // 2 - 30)
                         screen.blit(again_img, again_rect)
 
-                        exit_rect.left, exit_rect.top = (
-                            (const.WINDOW_WIDTH - exit_rect.width) // 2,
-                            (const.WINDOW_HEIGHT - exit_rect.height) // 2 + 30)
+                        exit_rect.topleft = (
+                            (const.Window.Width - exit_rect.width) // 2,
+                            (const.Window.Height - exit_rect.height) // 2 + 30)
                         screen.blit(exit_img, exit_rect)
 
-                case const.Status.PAUSE:
+                case const.Status.Pause:
                     self.check_paused()
                     volume_control.draw()
                     sound_control.draw()
 
                     screen.blit(self.current_pause_image, self.pause_rect)
 
-                case const.Status.LOGIN:
+                case const.Status.Login:
                     self.login_box.update()
                     self.login_box.draw()
                     screen.blit(login_title.get_surface(),
@@ -458,7 +459,7 @@ class Main:
             self.enemies.add(e_3)
 
     def check_paused(self):
-        if self.status != const.Status.PLAY:
+        if self.status != const.Status.Play:
             self.current_pause_image = self.pause_images[3]
 
             pygame.mixer.music.pause()

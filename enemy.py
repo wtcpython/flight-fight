@@ -25,7 +25,7 @@ class MidEnemy(EnemyBase):
     def __init__(self) -> None:
         super().__init__(const.Enemy.Mid)
 
-        self.set_image_hit(const.Enemy.Mid.IMAGE_HIT)
+        self.set_image_hit(const.Enemy.Mid.ImageHit)
 
 
 class LargeEnemy(EnemyBase):
@@ -36,8 +36,8 @@ class LargeEnemy(EnemyBase):
     def __init__(self) -> None:
         super().__init__(const.Enemy.Large)
 
-        self.set_image_hit(const.Enemy.Large.IMAGE_HIT)
-        self.set_fly_sound(const.Enemy.Large.FLY_SOUND)
+        self.set_image_hit(const.Enemy.Large.ImageHit)
+        self.set_fly_sound(const.Enemy.Large.FlySound)
 
     def set_music_volume(self, vol: int):
         """

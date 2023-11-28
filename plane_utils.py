@@ -9,7 +9,7 @@ import const
 
 pygame.base.init()
 
-screen = pygame.display.set_mode((const.WINDOW_WIDTH, const.WINDOW_HEIGHT))
+screen = pygame.display.set_mode((const.Window.Width, const.Window.Height))
 
 
 def load_img(path: str) -> pygame.surface.Surface:

@@ -23,14 +23,14 @@ class LoginBox():
     """
     def __init__(self):
         self.tip_text = TextRect(
-            "输入你的ID:", const.Color.WHITE, (0, 0))
+            "输入你的ID:", const.Color.White, (0, 0))
         self.tip_rect = self.tip_text.get_rect()
         self.login_box = pygame.Rect(0, 0, 200, self.tip_rect.height)
 
         self.tip_rect.left, self.tip_rect.top = ((
-            const.WINDOW_WIDTH - self.tip_rect.width -
+            const.Window.Width - self.tip_rect.width -
             self.login_box.width) // 2,
-            (const.WINDOW_HEIGHT - self.tip_rect.height) // 3)
+            (const.Window.Height - self.tip_rect.height) // 3)
         self.login_box.left, self.login_box.top = (
             self.tip_rect.right + 10, self.tip_rect.top)
 

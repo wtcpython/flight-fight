@@ -16,14 +16,13 @@ class BulletBase:
     己方飞机子弹基类
     """
     def __init__(self, pos, bullet_type: const.BulletType):
-        if bullet_type == const.BulletType.NORMAL:
+        if bullet_type == const.BulletType.Normal:
             self.image = load_img("./images/bullet1.png")
-        elif bullet_type == const.BulletType.PLUS:
+        elif bullet_type == const.BulletType.Plus:
             self.image = load_img("./images/bullet2.png")
 
         self.rect = self.image.get_rect()
-        self.init_pos = pos
-        self.set_bullet_location(pos)
+        self.rect.topleft = pos
         self.speed = const.BULLET_SPEED
         self.active = False
         self.mask = pygame.mask.from_surface(self.image)
@@ -32,10 +31,10 @@ class BulletBase:
         """
         计算子弹所造成的伤害
         """
-        base_damage = const.Player.DAMAGE
-        is_crit = random.random() < const.Player.CRIT_RATE
+        base_damage = const.Player.Damage
+        is_crit = random.random() < const.Player.CritRate
         if is_crit:
-            base_damage *= const.Player.CRIT_DAMAGE
+            base_damage *= const.Player.CritDamage
         return base_damage
 
     def move(self):
@@ -47,17 +46,11 @@ class BulletBase:
         if self.rect.top < self.speed:
             self.active = False
 
-    def set_bullet_location(self, pos):
-        """
-        设置子弹生成位置
-        """
-        self.rect.left, self.rect.top = pos
-
     def reset(self, pos):
         """
         重置子弹
         """
-        self.set_bullet_location(pos)
+        self.rect.topleft = pos
         self.active = True
 
     def check_hit(self, enemies):

@@ -22,25 +22,25 @@ class EnemyBase(pygame.sprite.Sprite):
         super().__init__()
         self.enemy_type = enemy_type
 
-        self.images = list(map(load_img, self.enemy_type.IMAGES))
+        self.images = list(map(load_img, self.enemy_type.Images))
         self.destroy_images = list(map(
-            load_img, self.enemy_type.DESTROY_IMAGES))
+            load_img, self.enemy_type.DestroyImages))
 
-        self.down_music = load_music(self.enemy_type.ENEMY_DOWN_MUSIC)
+        self.down_music = load_music(self.enemy_type.EnemyDownMusic)
 
-        self.damage = self.enemy_type.DAMAGE
-        self.kill_score = self.enemy_type.KILLSCORE
+        self.damage = self.enemy_type.Damage
+        self.kill_score = self.enemy_type.KillScore
 
         self.index = 0
 
         self.rect = self.images[0].get_rect()
-        self.speed = self.enemy_type.SPEED
+        self.speed = self.enemy_type.Speed
 
         self.set_enemy_location()
 
         self.mask = pygame.mask.from_surface(self.images[0])
 
-        self.const_blood = self.blood = self.enemy_type.BLOOD
+        self.const_blood = self.blood = self.enemy_type.Blood
 
         self.hit = False
         self.image_hit = None
@@ -52,7 +52,7 @@ class EnemyBase(pygame.sprite.Sprite):
         """
         敌机移动
         """
-        if self.rect.top < const.WINDOW_HEIGHT:
+        if self.rect.top < const.Window.Height:
             self.rect.top += self.speed
         else:
             self.reset()
@@ -74,7 +74,7 @@ class EnemyBase(pygame.sprite.Sprite):
         设置敌机位置
         """
         self.rect.left, self.rect.top = (
-            random.randint(20, const.WINDOW_WIDTH - self.rect.width - 20),
+            random.randint(20, const.Window.Width - self.rect.width - 20),
             random.randint(-10 * self.rect.height, 0))
 
     def move_center(self):
@@ -86,21 +86,21 @@ class EnemyBase(pygame.sprite.Sprite):
 
         offset = self.enemy_type.OFFSET
 
-        if self.rect.left > const.WINDOW_WIDTH // 2:
+        if self.rect.left > const.Window.Width // 2:
             self.rect.left = max(
-                const.WINDOW_WIDTH // 2, self.rect.left - offset)
+                const.Window.Width // 2, self.rect.left - offset)
 
         else:
             self.rect.left = min(
-                const.WINDOW_WIDTH // 2, self.rect.left + offset)
+                const.Window.Width // 2, self.rect.left + offset)
 
-        if self.rect.top > const.WINDOW_HEIGHT // 3:
+        if self.rect.top > const.Window.Height // 3:
             self.rect.top = max(
-                const.WINDOW_HEIGHT // 3, self.rect.top - offset)
+                const.Window.Height // 3, self.rect.top - offset)
 
         else:
             self.rect.top = min(
-                const.WINDOW_HEIGHT // 3, self.rect.top + offset)
+                const.Window.Height // 3, self.rect.top + offset)
 
     def reset(self):
         """
