@@ -6,7 +6,7 @@
 import pygame
 
 import const
-from plane_utils import screen, load_img
+from utils import screen, load_img
 from text_rect import TextRect
 
 life_img = load_img("./images/life.png")

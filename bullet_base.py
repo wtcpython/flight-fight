@@ -7,7 +7,7 @@ import pygame
 
 import const
 
-from plane_utils import screen, load_img
+from utils import screen, load_img
 from enemy_base import EnemyBase
 
 

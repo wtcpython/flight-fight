@@ -10,14 +10,14 @@ from shutil import copyfile
 import pygame
 
 import const
-from plane_utils import screen
+from utils import screen
 from text_rect import TextRect
 
 COLOR_ACTIVE = pygame.color.Color("#0AFFE9")
 COLOR_INACTIVE = pygame.color.Color("#D2FFFA")
 
 
-class LoginBox():
+class LoginBox:
     """
     输入框
     """
@@ -54,8 +54,8 @@ class LoginBox():
             self.account = self.text
             self.text = ""
             return self.account
-        else:
-            self.text = '输入6-16个字符!'
+
+        self.text = '输入6-16个字符!'
         return None
 
     def check_event(self, event):

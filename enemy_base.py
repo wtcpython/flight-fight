@@ -7,7 +7,7 @@ import pygame
 
 import const
 
-from plane_utils import screen, load_music, load_img
+from utils import screen, load_music, load_img
 from screen_element import draw_blood_line
 
 

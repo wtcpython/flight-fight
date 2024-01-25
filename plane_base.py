@@ -6,7 +6,7 @@ import pygame
 from pygame.locals import K_LEFT, K_RIGHT, K_UP, K_DOWN
 
 import const
-from plane_utils import screen, load_img, load_music
+from utils import screen, load_img, load_music
 from screen_element import draw_blood_line
 
 

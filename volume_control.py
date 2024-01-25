@@ -4,7 +4,7 @@
 import pygame
 
 import const
-from plane_utils import screen
+from utils import screen
 from text_rect import TextRect
 
 
