@@ -17,7 +17,7 @@ import const
 
 from enemy import SmallEnemy, MidEnemy, LargeEnemy
 
-from plane_utils import (
+from utils import (
     screen, load_music, load_img, read_json, write_json)
 
 from bullet_base import BulletBase
@@ -343,10 +343,14 @@ class Main:
                             if add_score:
                                 self.score += add_score
                                 r = random.random()
-                                if r < 0.3:
+                                if r < 0.2:
                                     self.bomb_num += 1
-                                elif r < 0.4:
+                                elif r < 0.3:
+                                    self.bomb_num = max(0, self.bomb_num - 1)
+                                elif r < 0.5:
                                     self.charge = min(100, self.charge + 10)
+                                elif r < 0.6:
+                                    self.charge = max(0, self.charge - 10)
 
                         # 绘制中型敌机：
                         for each in self.mid_enemies:
@@ -445,6 +449,9 @@ class Main:
             pygame.display.flip()
 
     def increase_enemies(self, s_num: int, m_num: int, b_num: int):
+        """
+        添加指定的敌机数量
+        """
         for _ in range(s_num):
             e_1 = SmallEnemy()
             self.small_enemies.add(e_1)
@@ -459,6 +466,9 @@ class Main:
             self.enemies.add(e_3)
 
     def check_paused(self):
+        """
+        检查是否处于暂停状态
+        """
         if self.status != const.Status.Play:
             self.current_pause_image = self.pause_images[3]
 
