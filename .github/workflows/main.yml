@@ -47,7 +47,7 @@ jobs:
         onefile: true
 
     - name: Upload Artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: flight-fight-nightly-build-${{ matrix.os }}-x64-${{ steps.date.outputs.date }}
         path: |
