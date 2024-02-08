@@ -21,7 +21,7 @@ def show_score(score: int):
     显示当前分数
     """
     render_score = TextRect(
-        f"Score: {score}", const.Color.White,
+        f"Score: {score}", pygame.Color("White"),
         (const.Window.Width // 2, const.Window.FrameWidth * 3))
     screen.blit(render_score.get_surface(), render_score.get_rect())
 
@@ -35,7 +35,7 @@ def show_bomb_info(bomb_num: int):
         const.Window.Height - const.Window.FrameWidth - bomb_rect.height))
 
     bomb_num_render = TextRect(
-        f"X {bomb_num}", const.Color.White, (0, 0))
+        f"X {bomb_num}", pygame.Color("White"), (0, 0))
     rect = bomb_num_render.get_rect()
     screen.blit(
         bomb_num_render.get_surface(), (
@@ -61,7 +61,7 @@ def show_blood_num(blood: float, const_blood: float):
     显示血量数值
     """
     text = TextRect(f"{round(blood, 2)} / {const_blood}",
-                    const.Color.Black, (0, 0), 16)
+                    pygame.Color("Black"), (0, 0), 16)
     text.render_text()
     rect = text.render.get_rect()
     rect.left, rect.top = (
@@ -80,15 +80,15 @@ def show_small_skill_charge(percent: int):
         const.Window.Width - radius - 10,
         const.Window.Height - radius * 4 - 10)
 
-    text = TextRect("E", const.Color.Black, center_pos, 20)
+    text = TextRect("E", pygame.Color("Black"), center_pos, 20)
     rect = (const.Window.Width - radius * 2 - 10,
             const.Window.Height - radius * 5 - 10,
             radius * 2, radius * 2)
 
-    pygame.draw.arc(screen, const.Color.Black, rect,
+    pygame.draw.arc(screen, pygame.Color("Black"), rect,
                     0, 3.14 * 2, 1)
 
-    pygame.draw.arc(screen, const.Color.Red, rect,
+    pygame.draw.arc(screen, pygame.Color("Red"), rect,
                     0, 3.14 * percent / 50, 2)
 
     screen.blit(text.get_surface(), text.get_rect())
@@ -104,15 +104,15 @@ def show_final_charge(load_charge: int):
         const.Window.Width - radius - 10,
         const.Window.Height - radius * 2)
 
-    text = TextRect("Q", const.Color.Black, center_pos, 20)
+    text = TextRect("Q", pygame.Color("Black"), center_pos, 20)
     rect = (const.Window.Width - radius * 2 - 10,
             const.Window.Height - radius * 3,
             radius * 2, radius * 2)
 
-    pygame.draw.arc(screen, const.Color.Black, rect,
+    pygame.draw.arc(screen, pygame.Color("Black"), rect,
                     0, 3.14 * 2, 1)
 
-    pygame.draw.arc(screen, const.Color.Red, rect,
+    pygame.draw.arc(screen, pygame.Color("Red"), rect,
                     0, 3.14 * load_charge / 50, 2)
 
     screen.blit(text.get_surface(), text.get_rect())

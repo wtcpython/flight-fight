@@ -138,7 +138,7 @@ class Main:
             text = "登   录"
 
         login_title = TextRect(
-            text, const.Color.White,
+            text, pygame.Color("White"),
             (const.Window.Width // 2, const.Window.FrameWidth * 5))
 
         data = read_json("./userdata/all_users.json")
@@ -405,13 +405,13 @@ class Main:
                         # 绘制结束画面
                         game_over = TextRect(
                             "Win!" if self.score >= data[mode]["MinimumScore"]
-                            else "Lose!", const.Color.White,
+                            else "Lose!", pygame.Color("White"),
                             (const.Window.Width // 2, 150))
                         game_over_rect = game_over.get_rect()
                         screen.blit(game_over.get_surface(), game_over_rect)
 
                         best_score = TextRect(
-                            f"Best : {record_score}", const.Color.White,
+                            f"Best : {record_score}", pygame.Color("White"),
                             (const.Window.Width // 2, 100))
                         screen.blit(best_score.get_surface(),
                                     best_score.get_rect())

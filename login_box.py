@@ -23,7 +23,7 @@ class LoginBox:
     """
     def __init__(self):
         self.tip_text = TextRect(
-            "输入你的ID:", const.Color.White, (0, 0))
+            "输入你的ID:", pygame.Color("White"), (0, 0))
         self.tip_rect = self.tip_text.get_rect()
         self.login_box = pygame.Rect(0, 0, 200, self.tip_rect.height)
 

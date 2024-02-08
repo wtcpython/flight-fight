@@ -132,14 +132,3 @@ class Enemy:
         ImageHit = "./images/enemy_large_hit.png"
         FlySound = "./sound/large_enemy_flying.ogg"
         Offset = 0
-
-
-class Color:
-    """
-    颜色 RGB 值
-    """
-    Red = (255, 0, 0)
-    Blue = (0, 0, 255)
-    Green = (0, 255, 0)
-    White = (255, 255, 255)
-    Black = (0, 0, 0)
