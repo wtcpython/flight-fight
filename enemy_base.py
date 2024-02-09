@@ -73,8 +73,8 @@ class EnemyBase(pygame.sprite.Sprite):
         """
         设置敌机位置
         """
-        self.rect.left, self.rect.top = (
-            random.randint(20, const.Window.Width - self.rect.width - 20),
+        self.rect.center = (
+            random.randint(self.rect.width, const.Window.Width - self.rect.width),
             random.randint(-10 * self.rect.height, 0))
 
     def move_center(self):

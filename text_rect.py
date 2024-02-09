@@ -4,8 +4,7 @@
 # pylint: disable=c-extension-no-member
 import pygame
 
-import const
-
+from utils import screen
 
 class TextRect:
     """
@@ -15,10 +14,13 @@ class TextRect:
                  color: pygame.Color = pygame.Color("White"),
                  center_postition: tuple[int, int] = (0, 0),
                  font_size: int = 32):
+        self.font = pygame.font.Font("./msyhbd.ttc", font_size)
         self.text = text
         self.color = color
 
         self.center_position = center_postition
+        self.__rect = self.get_rect()
+        self.pos = self.__rect.topleft
 
         self.font_size = font_size
 
@@ -36,23 +38,17 @@ class TextRect:
         """
         self.color = color
 
-    def render_text(self):
-        """
-        字体渲染
-        """
-        font = pygame.font.Font("./msyhbd.ttc", self.font_size)
-        self.render = font.render(self.text, True, self.color)
-
-    def get_surface(self) -> pygame.surface.Surface:
-        """
-        转换为 pygame.surface.Surface 用于绘制
-        """
-        self.render_text()
-        return self.render
-
     def get_rect(self) -> pygame.rect.Rect:
         """
         返回 pygame.rect.Rect 用于绘制
         """
-        self.render_text()
+        self.render = self.font.render(self.text, True, self.color)
         return self.render.get_rect(center=self.center_position)
+
+    def blit(self, pos: tuple[int, int] = ()):
+        """
+        绘制文本
+        """
+        if pos == ():
+            pos = self.pos
+        screen.blit(self.font.render(self.text, True, self.color), pos)

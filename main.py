@@ -407,14 +407,13 @@ class Main:
                             "Win!" if self.score >= data[mode]["MinimumScore"]
                             else "Lose!", pygame.Color("White"),
                             (const.Window.Width // 2, 150))
-                        game_over_rect = game_over.get_rect()
-                        screen.blit(game_over.get_surface(), game_over_rect)
+                        game_over.blit()
 
                         best_score = TextRect(
                             f"Best : {record_score}", pygame.Color("White"),
                             (const.Window.Width // 2, 100))
-                        screen.blit(best_score.get_surface(),
-                                    best_score.get_rect())
+
+                        best_score.blit()
 
                         again_rect.topleft = (
                             (const.Window.Width - again_rect.width) // 2,
@@ -437,8 +436,7 @@ class Main:
                 case const.Status.Login:
                     self.login_box.update()
                     self.login_box.draw()
-                    screen.blit(login_title.get_surface(),
-                                login_title.get_rect())
+                    login_title.blit()
 
             # 切换图片
             if not delay % 5:

@@ -65,14 +65,6 @@ class Enemy:
     敌机固定参数
     """
 
-    class Type:
-        """
-        种类
-        """
-        Small = 0
-        Mid = 1
-        Large = 2
-
     class Small:
         """
         小飞机

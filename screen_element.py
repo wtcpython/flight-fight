@@ -23,7 +23,7 @@ def show_score(score: int):
     render_score = TextRect(
         f"Score: {score}", pygame.Color("White"),
         (const.Window.Width // 2, const.Window.FrameWidth * 3))
-    screen.blit(render_score.get_surface(), render_score.get_rect())
+    render_score.blit()
 
 
 def show_bomb_info(bomb_num: int):
@@ -37,10 +37,9 @@ def show_bomb_info(bomb_num: int):
     bomb_num_render = TextRect(
         f"X {bomb_num}", pygame.Color("White"), (0, 0))
     rect = bomb_num_render.get_rect()
-    screen.blit(
-        bomb_num_render.get_surface(), (
-            bomb_rect.width + 10,
-            const.Window.Height - const.Window.FrameWidth - rect.height))
+    bomb_num_render.blit((
+        bomb_rect.width + 10,
+        const.Window.Height - const.Window.FrameWidth - rect.height))
 
 
 def draw_blood_line(rect: pygame.Rect, offset: int, percent: float):
@@ -62,8 +61,7 @@ def show_blood_num(blood: float, const_blood: float):
     """
     text = TextRect(f"{round(blood, 2)} / {const_blood}",
                     pygame.Color("Black"), (0, 0), 16)
-    text.render_text()
-    rect = text.render.get_rect()
+    rect = text.get_rect()
     rect.left, rect.top = (
         const.Window.Width - rect.width - const.Window.FrameWidth,
         const.Window.Height - rect.height - const.Window.FrameWidth)
@@ -91,7 +89,7 @@ def show_small_skill_charge(percent: int):
     pygame.draw.arc(screen, pygame.Color("Red"), rect,
                     0, 3.14 * percent / 50, 2)
 
-    screen.blit(text.get_surface(), text.get_rect())
+    text.blit()
 
 
 def show_final_charge(load_charge: int):
@@ -115,4 +113,4 @@ def show_final_charge(load_charge: int):
     pygame.draw.arc(screen, pygame.Color("Red"), rect,
                     0, 3.14 * load_charge / 50, 2)
 
-    screen.blit(text.get_surface(), text.get_rect())
+    text.blit()

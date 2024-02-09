@@ -64,8 +64,8 @@ class VolumeControlBase():
         """
         pygame.draw.rect(screen, (255, 0, 0), self.volume_frame, 2, 15)
         pygame.draw.rect(screen, (255, 0, 0), self.volume_full, 0, 15)
-        screen.blit(self.volume_text.get_surface(), self.volume_rect)
-        screen.blit(self.percent_show.get_surface(), self.percent_show_rect)
+        self.volume_text.blit((self.volume_rect.left, self.volume_rect.top))
+        self.percent_show.blit((self.percent_show_rect.left, self.percent_show_rect.top))
 
     def check(self, pos) -> bool:
         """

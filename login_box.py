@@ -89,8 +89,7 @@ class LoginBox:
         """
         绘制
         """
-        screen.blit(self.tip_text.get_surface(), self.tip_rect)
-        screen.blit(self.render_text.get_surface(),
-                    (self.login_box.x+2, self.login_box.y+2))
+        self.tip_text.blit((self.tip_rect.left, self.tip_rect.top))
+        self.render_text.blit((self.login_box.x+2, self.login_box.y+2))
         pygame.draw.rect(screen, self.current_color,
                          self.login_box, 2, border_radius=10)
