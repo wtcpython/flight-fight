@@ -2,7 +2,7 @@
     常量定义
 """
 
-VERSION = 0.5
+VERSION = 0.6
 
 SUPPLY_SPEED = 6
 
