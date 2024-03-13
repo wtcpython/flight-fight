@@ -26,6 +26,6 @@
 
 ### 如何从源代码构建
 
-    1. Python Version >= 3.10
-    2. Pygame Version >= 2.5
-    3. 满足运行以上两者条件的 Windows, MacOS 或 Linux 系统版本
+    1. python >= 3.10
+    2. pygame-ce >= 2.4 (使用 pygame-ce 而不是 pygame)
+    3. Windows, MacOS 或 Linux 等任意受支持的桌面操作系统
