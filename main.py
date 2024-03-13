@@ -18,7 +18,7 @@ import const
 from enemy import SmallEnemy, MidEnemy, LargeEnemy
 
 from utils import (
-    screen, load_music, load_img, read_json, write_json)
+    screen, window, load_music, load_img, read_json, write_json)
 
 from bullet_base import BulletBase
 from plane_base import Plane
@@ -45,11 +45,10 @@ class Main:
     plft
     """
     def __init__(self):
-        pygame.display.set_caption(const.Window.Title)
+        window.set_icon(load_img("./icon.ico"))
         # 基本框架
 
         self.background = load_img("./images/background.png")
-        pygame.display.set_icon(load_img("./icon.ico"))
 
         # 战机初始化
         self.my_plane = Plane()
@@ -444,7 +443,7 @@ class Main:
             delay -= 1
             if not delay:
                 delay = 100
-            pygame.display.flip()
+            window.flip()
 
     def increase_enemies(self, s_num: int, m_num: int, b_num: int):
         """
