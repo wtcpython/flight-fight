@@ -5,7 +5,6 @@
 # pylint: disable=no-name-in-module
 
 from pathlib import Path
-from shutil import copyfile
 
 import pygame
 
@@ -13,8 +12,8 @@ import const
 from utils import screen
 from text_rect import TextRect
 
-COLOR_ACTIVE = pygame.color.Color("#0AFFE9")
-COLOR_INACTIVE = pygame.color.Color("#D2FFFA")
+COLOR_ACTIVE = pygame.color.Color(10, 255, 233)
+COLOR_INACTIVE = pygame.color.Color(210, 255, 250)
 
 
 class LoginBox:
@@ -46,11 +45,10 @@ class LoginBox:
         检查输入内容
         """
         if 6 <= len(self.text) < 16:
-            if (path := Path(f'./userdata/{self.text}.json')).exists():
-                self.account = self.text
-                self.text = ""
-                return self.account
-            copyfile("./userdata/all_users.json", path)
+
+            if not (path := Path(f'./userdata/{self.text}.json')).exists():
+                path.write_bytes(Path("./userdata/all_users.json").read_bytes())
+
             self.account = self.text
             self.text = ""
             return self.account
