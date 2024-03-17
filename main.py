@@ -76,7 +76,7 @@ class Main:
 
         self.pause_rect.topleft = (
                 const.Window.Width - self.pause_rect.width - \
-                const.Window.FrameWidth, const.Window.FrameWidth)
+                const.Window.Margin, const.Window.Margin)
 
         self.current_pause_image = self.pause_images[0]
         self.clock = pygame.time.Clock()
@@ -138,7 +138,7 @@ class Main:
 
         login_title = TextRect(
             text, pygame.Color("White"),
-            (const.Window.Width // 2, const.Window.FrameWidth * 5))
+            (const.Window.Width // 2, const.Window.Margin * 5))
 
         data = read_json("./userdata/all_users.json")
 

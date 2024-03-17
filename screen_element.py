@@ -22,7 +22,7 @@ def show_score(score: int):
     """
     render_score = TextRect(
         f"Score: {score}", pygame.Color("White"),
-        (const.Window.Width // 2, const.Window.FrameWidth * 3))
+        (const.Window.Width // 2, const.Window.Margin * 3))
     render_score.blit()
 
 
@@ -31,15 +31,15 @@ def show_bomb_info(bomb_num: int):
     显示当前炸弹数量
     """
     screen.blit(bomb_img, (
-        const.Window.FrameWidth,
-        const.Window.Height - const.Window.FrameWidth - bomb_rect.height))
+        const.Window.Margin,
+        const.Window.Height - const.Window.Margin - bomb_rect.height))
 
     bomb_num_render = TextRect(
         f"X {bomb_num}", pygame.Color("White"), (0, 0))
     rect = bomb_num_render.get_rect()
     bomb_num_render.blit((
         bomb_rect.width + 10,
-        const.Window.Height - const.Window.FrameWidth - rect.height))
+        const.Window.Height - const.Window.Margin - rect.height))
 
 
 def draw_blood_line(rect: pygame.Rect, offset: int, percent: float):
@@ -63,8 +63,8 @@ def show_blood_num(blood: float, const_blood: float):
                     pygame.Color("Black"), (0, 0), 16)
     rect = text.get_rect()
     rect.left, rect.top = (
-        const.Window.Width - rect.width - const.Window.FrameWidth,
-        const.Window.Height - rect.height - const.Window.FrameWidth)
+        const.Window.Width - rect.width - const.Window.Margin,
+        const.Window.Height - rect.height - const.Window.Margin)
     screen.blit(text.render, rect)
 
 

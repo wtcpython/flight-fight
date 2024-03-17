@@ -26,7 +26,7 @@ class Window:
     """
     Height = 960
     Width = 658
-    FrameWidth = 10
+    Margin = 10
     Title = f"飞机大战 V{VERSION}"
 
 
